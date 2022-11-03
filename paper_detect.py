@@ -7,8 +7,8 @@ cap = cv.VideoCapture(0)
 
 # Add sliders for canny parameters
 cv.namedWindow("Trackbars")
-cv.createTrackbar("Min Threshold", "Trackbars", 60, 250, lambda x: None)
-cv.createTrackbar("Max Threshold", "Trackbars", 200, 250, lambda x: None)
+cv.createTrackbar("Min Threshold", "Trackbars", 0, 250, lambda x: None)
+cv.createTrackbar("Max Threshold", "Trackbars", 84, 250, lambda x: None)
 
 while True:
     # Read trackbars
@@ -21,10 +21,13 @@ while True:
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     # Blur the image
     blur = cv.GaussianBlur(gray, (5, 5), 0)
-    
+    blank_image = np.zeros((gray.shape[0], gray.shape[1]), np.uint8)
 
     kernel = cv.getStructuringElement(cv.MORPH_RECT, (5, 5))
-    img = cv.morphologyEx(img, cv.MORPH_CLOSE, kernel, iterations=3)
+    # img = cv.morphologyEx(img, cv.MORPH_CLOSE, kernel, iterations=3)
+    # dilated = cv.dilate(blur, kernel, iterations=3)
+    dilated = cv.morphologyEx(blur, cv.MORPH_CLOSE, kernel, iterations=3)
+
 
     # mask = np.zeros(img.shape[:2],np.uint8)
     # bgdModel = np.zeros((1,65),np.float64)
@@ -36,15 +39,28 @@ while True:
 
     # Apply Canny edge detection
     canny = cv.Canny(img, min_threshold, max_threshold)
-    canny = cv.dilate(canny, cv.getStructuringElement(cv.MORPH_ELLIPSE, (5, 5)), iterations=3)
+    # canny = cv.dilate(canny, cv.getStructuringElement(cv.MORPH_ELLIPSE, (5, 5)), iterations=3)
 
 
     # Close the gaps between edges
-    
-    closed = cv.morphologyEx(canny, cv.MORPH_CLOSE, kernel, iterations=10)
+    closed = cv.morphologyEx(canny, cv.MORPH_CLOSE, kernel, iterations=3)
+
+    # Draw lines
+    lines = cv.HoughLinesP(closed, 1, np.pi / 180, 100, minLineLength=100, maxLineGap=10)
+
+    if lines is not None:
+        for line in lines:
+            x1, y1, x2, y2 = line[0]
+            cv.line(blank_image, (x1, y1), (x2, y2), (255, 255, 255), 4, cv.LINE_8)
+            cv.line(closed, (x1, y1), (x2, y2), (255, 255, 255), 4, cv.LINE_8)
+
 
     # Find contours
-    contours, _ = cv.findContours(closed, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv.findContours(closed.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+
+    # Filter contours
+    contours = [c for c in contours if cv.contourArea(c) > 1000]
+    contours = [c for c in contours if cv.arcLength(c, False) > 100]
 
     # Find the biggest contour
     biggest = []
@@ -52,10 +68,12 @@ while True:
     for contour in contours:
         area = cv.contourArea(contour)
         if area > 100:
+            
             peri = cv.arcLength(contour, True)
-            approx = cv.approxPolyDP(contour, 0.05 * peri, True)
+            approx = cv.approxPolyDP(contour, 0.02 * peri, True)
             if area > max_area and len(approx) == 4:
-                biggest.append(contour)
+                biggest = []
+                biggest.append(approx)
                 print(approx)
                 max_area = area
     
@@ -67,6 +85,7 @@ while True:
 
     # Show the image
     cv.imshow("Image", img)
+    cv.imshow("lines", blank_image)
     cv.imshow("canny", canny)
 
     # Stop if escape key is pressed
