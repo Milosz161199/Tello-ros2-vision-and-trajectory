@@ -7,7 +7,10 @@ if __name__ == "__main__":
     point3D = Point3D(2, 3, [255, 0, 0])
     point3D.showPoint()
 
-    img = cv2.imread('page.png')
+    img = cv2.imread('grid_paper.png')
+    trajectoryDetector = TrajectoryDetector(img)
+    trajectoryDetector.detectColors()
+
     cv2.imshow("WIN", img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
