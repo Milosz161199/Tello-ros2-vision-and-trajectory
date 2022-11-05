@@ -12,6 +12,7 @@ class Point3D:
         self.color = color
 
         self.z = self.calculateZ()
+        self.is_visited = False
 
     def calculateZ(self):
         for color, z in Point3D.colors.getColors():
@@ -20,3 +21,6 @@ class Point3D:
 
     def showPoint(self):
         print(self.x, self.y, self.z)
+
+    def getPoint3D(self):
+        return {"x": self.x, "y": self.y, "z": self.z, "is_visited": self.is_visited}
