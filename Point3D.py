@@ -15,8 +15,8 @@ class Point3D:
         self.is_visited = False
 
     def calculateZ(self):
-        for color, z in Point3D.colors.getColors():
-            if collections.Counter(color) == collections.Counter(self.color):
+        for c, z in Point3D.colors.getColors():
+            if str(c) == str(self.color):
                 return z
 
     def showPoint(self):

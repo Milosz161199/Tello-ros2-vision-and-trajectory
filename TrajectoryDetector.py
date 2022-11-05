@@ -41,56 +41,70 @@ class TrajectoryDetector:
         mask_1 = cv2.inRange(self.img_hsv, self.red_lower_1, self.red_upper_1)
         mask = mask_0 + mask_1
         result = cv2.bitwise_and(self.img_color, self.img_color, mask=mask)
-        height, width = result.shape[:2]
 
-        for y in range(0, height, self.GRID_SIZE):
-            for x in range(0, width, self.GRID_SIZE):
-                if str(result[y, x]) != "[0 0 0]":
-                    point3d = Point3D(x, y, [255, 0, 0])
-                    self.trajectory.append(point3d.getPoint3D())
+        a = np.argwhere(result != [0, 0, 0])
+        a = np.delete(a, 2, 1)  # delete third column in a
+        counter = self.GRID_SIZE
+        for point2d in a:
+            if counter == self.GRID_SIZE:
+                point3d = Point3D(point2d[0], point2d[1], [255, 0, 0])
+                self.trajectory.append(point3d.getPoint3D())
+                counter = 0
+                continue
+            counter += 1
 
-        # cv2.imshow("RED", result)
+        cv2.imshow("RED", result)
 
     def findBlueColor(self):
         mask = cv2.inRange(self.img_hsv, self.blue_lower, self.blue_upper)
         result = cv2.bitwise_and(self.img_color, self.img_color, mask=mask)
 
-        height, width = result.shape[:2]
+        a = np.argwhere(result != [0, 0, 0])
+        a = np.delete(a, 2, 1)  # delete third column in a
+        counter = self.GRID_SIZE
+        for point2d in a:
+            if counter == self.GRID_SIZE:
+                point3d = Point3D(point2d[0], point2d[1], [0, 0, 255])
+                self.trajectory.append(point3d.getPoint3D())
+                counter = 0
+                continue
+            counter += 1
 
-        for y in range(0, height, self.GRID_SIZE):
-            for x in range(0, width, self.GRID_SIZE):
-                if str(result[y, x]) != "[0 0 0]":
-                    point3d = Point3D(x, y, [0, 0, 255])
-                    self.trajectory.append(point3d.getPoint3D())
-
-        # cv2.imshow("BLUE", result)
+        cv2.imshow("BLUE", result)
 
     def findGreenColor(self):
         mask = cv2.inRange(self.img_hsv, self.green_lower, self.green_upper)
         result = cv2.bitwise_and(self.img_color, self.img_color, mask=mask)
-        height, width = result.shape[:2]
 
-        for y in range(0, height, self.GRID_SIZE):
-            for x in range(0, width, self.GRID_SIZE):
-                if str(result[y, x]) != "[0 0 0]":
-                    point3d = Point3D(x, y, [0, 255, 0])
-                    self.trajectory.append(point3d.getPoint3D())
+        a = np.argwhere(result != [0, 0, 0])
+        a = np.delete(a, 2, 1)  # delete third column in a
+        counter = self.GRID_SIZE
+        for point2d in a:
+            if counter == self.GRID_SIZE:
+                point3d = Point3D(point2d[0], point2d[1], [0, 255, 0])
+                self.trajectory.append(point3d.getPoint3D())
+                counter = 0
+                continue
+            counter += 1
 
-        # cv2.imshow("GREEN", result)
+        cv2.imshow("GREEN", result)
 
     def findYellowColor(self):
         mask = cv2.inRange(self.img_hsv, self.yellow_lower, self.yellow_upper)
         result = cv2.bitwise_and(self.img_color, self.img_color, mask=mask)
 
-        height, width = result.shape[:2]
+        a = np.argwhere(result != [0, 0, 0])
+        a = np.delete(a, 2, 1)  # delete third column in a
+        counter = self.GRID_SIZE
+        for point2d in a:
+            if counter == self.GRID_SIZE:
+                point3d = Point3D(point2d[0], point2d[1], [255, 255, 0])
+                self.trajectory.append(point3d.getPoint3D())
+                counter = 0
+                continue
+            counter += 1
 
-        for y in range(0, height, self.GRID_SIZE):
-            for x in range(0, width, self.GRID_SIZE):
-                if str(result[y, x]) != "[0 0 0]":
-                    point3d = Point3D(x, y, [255, 255, 0])
-                    self.trajectory.append(point3d.getPoint3D())
-
-        # cv2.imshow("YELLOW", result)
+        cv2.imshow("YELLOW", result)
 
     def detectColors(self):
         self.findBlueColor()

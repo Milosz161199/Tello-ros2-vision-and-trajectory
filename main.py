@@ -5,11 +5,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    # fig = plt.figure()
-    # ax = plt.axes(projection='3d')
+    fig = plt.figure()
+    ax = plt.axes(projection='3d')
 
-    point3D = Point3D(2, 3, [255, 0, 0])
-    point3D.showPoint()
+    # point3D = Point3D(2, 3, [255, 0, 0])
+    # point3D.showPoint()
 
     img = cv2.imread('page.png')
     trajectoryDetector = TrajectoryDetector(img)
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         y.append(point3d['y'])
         z.append(point3d['z'])
 
-    # ax.plot3D(x, y, z, 'gray')
+    ax.scatter(x, y, z, 'gray')
 
     # cv2.imshow("WIN", img)
     # cv2.waitKey(0)
