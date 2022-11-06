@@ -6,15 +6,15 @@ from Point3D import *
 class TrajectoryDetector:
     def __init__(self, image):
 
-        self.GRID_SIZE = 5
+        self.GRID_SIZE = 10
 
         self.img_color = image
         self.trajectory = list()
 
         self.img_hsv = cv2.cvtColor(self.img_color, cv2.COLOR_BGR2HSV)
 
-        self.blue_upper = np.array([120, 255, 255])
         self.blue_lower = np.array([94, 80, 2])
+        self.blue_upper = np.array([120, 255, 255])
 
         # lower mask (0-10)
         self.red_lower_0 = np.array([0, 50, 50])
