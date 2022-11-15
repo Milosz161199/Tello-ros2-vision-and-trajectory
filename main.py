@@ -6,7 +6,15 @@ if __name__ == "__main__":
     fig = plt.figure()
     ax = plt.axes(projection='3d')
 
-    img = cv2.imread('Grid_trajectory_02.png')
+    img = cv2.imread('image.png')
+    scale_percent = 100  # percent of original size
+    width = int(img.shape[1] * scale_percent / 100)
+    height = int(img.shape[0] * scale_percent / 100)
+    dim = (width, height)
+
+    # resize image
+    img = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
+
     trajectoryDetector = TrajectoryDetector(img)
     trajectoryDetector.prepareTrajectory()
     print(trajectoryDetector.sorted_trajectory)
