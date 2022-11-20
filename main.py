@@ -4,10 +4,12 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     fig = plt.figure()
+    # fig1 = plt.figure()
     ax = plt.axes(projection='3d')
+    # ax1 = plt.axes()
 
-    img = cv2.imread('image.png')
-    scale_percent = 100  # percent of original size
+    img = cv2.imread('test02.png')
+    scale_percent = 50  # percent of original size
     width = int(img.shape[1] * scale_percent / 100)
     height = int(img.shape[0] * scale_percent / 100)
     dim = (width, height)
@@ -17,7 +19,7 @@ if __name__ == "__main__":
 
     trajectoryDetector = TrajectoryDetector(img)
     trajectoryDetector.prepareTrajectory()
-    print(trajectoryDetector.sorted_trajectory)
+    print(trajectoryDetector.getTrajectory())
 
     x = list()
     y = list()
@@ -32,6 +34,10 @@ if __name__ == "__main__":
     ax.set_xlabel('X-axis')
     ax.set_ylabel('Y-axis')
     ax.set_zlabel('Z-axis')
+
+    # ax1.plot(x, y)
+    # ax1.set_xlabel('X-axis')
+    # ax1.set_ylabel('Y-axis')
 
     cv2.imshow("WIN", img)
     cv2.waitKey(1000)
