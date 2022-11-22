@@ -38,6 +38,8 @@ while True:
     
     contours, hierarchy = cv.findContours(canny, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     biggest = None
+    roi = None
+
     max_area = 0
     for contour in contours:
         area = cv.contourArea(contour)
@@ -85,6 +87,8 @@ while True:
     cv.imshow("Blur", blur)
     cv.imshow("Canny", canny)
     cv.imshow('img', img)
+    if roi is not None:
+        cv.imshow('roi', roi)
 
     
 
