@@ -2,21 +2,43 @@ import cv2 as cv
 import numpy as np
 import time
 # from itertools import combinations
+import matplotlib.pyplot as plt
+from imutils.perspective import order_points
 
-# Load the webcam
+def perspective_transformation(img, box):
+  box = np.array(box, dtype="int")
+  src_pts = order_points(box)
+
+  # use Euclidean distance to get width & height
+  width = int(np.linalg.norm(src_pts[0] - src_pts[1]))
+  height = int(np.linalg.norm(src_pts[0] - src_pts[3]))
+
+  dst_pts = np.array([[0,0], [width,0], [width,height], [0,height]], dtype=np.float32)
+
+  M = cv.getPerspectiveTransform(src_pts, dst_pts)
+  warped_img = cv.warpPerspective(img, M, (width, height))
+
+  return warped_img
+
+# Load the webcam    
 cap = cv.VideoCapture(0)
+_, img = cap.read()
+
 
 # Add sliders for canny parameters
 cv.namedWindow("Trackbars")
 cv.createTrackbar("Min Threshold", "Trackbars", 30, 250, lambda x: None)
 cv.createTrackbar("Max Threshold", "Trackbars", 50, 250, lambda x: None)
 
+
+
 previous_contour = None
 # start timer
 start = time.time()
+pts1 = np.float32([[360,50],[2122,470],[2264, 1616],[328,1820]])
+
 
 while True:
-    
 
     # Read trackbars
     min_threshold = cv.getTrackbarPos("Min Threshold", "Trackbars")
@@ -49,6 +71,7 @@ while True:
             approx = cv.approxPolyDP(contour, 0.02 * peri, True)
             if area > max_area and len(approx) == 4:
                 # biggest = []
+                bingo = approx.reshape(4,2)
                 biggest = contour
                 # print(approx)
                 max_area = area
@@ -59,6 +82,7 @@ while True:
         cv.drawContours(img, biggest, -1, (0, 255, 0), 2)
         rect = cv.minAreaRect(biggest)
         box = cv.boxPoints(rect)
+        print(box)
         box = np.int0(box)
         cv.drawContours(img, [box], 0, (0, 0, 255), 2)
 
@@ -88,6 +112,7 @@ while True:
     cv.imshow("Canny", canny)
     cv.imshow('img', img)
     if roi is not None:
+        roi = perspective_transformation(img, bingo)
         cv.imshow('roi', roi)
 
     
