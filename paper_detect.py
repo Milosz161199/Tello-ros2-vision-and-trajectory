@@ -8,8 +8,8 @@ cap = cv.VideoCapture(0)
 
 # Add sliders for canny parameters
 cv.namedWindow("Trackbars")
-cv.createTrackbar("Min Threshold", "Trackbars", 1, 250, lambda x: None)
-cv.createTrackbar("Max Threshold", "Trackbars", 84, 250, lambda x: None)
+cv.createTrackbar("Min Threshold", "Trackbars", 30, 250, lambda x: None)
+cv.createTrackbar("Max Threshold", "Trackbars", 50, 250, lambda x: None)
 
 previous_contour = None
 # start timer
@@ -23,21 +23,21 @@ while True:
     max_threshold = cv.getTrackbarPos("Max Threshold", "Trackbars")
 
     # Read the webcam
-    # _, img = cap.read()
-    img = cv.imread("room_with_grid2.png")
-    img = cv.resize(img, (0, 0), fx=0.2, fy=0.2)
+    _, img = cap.read()
+    # img = cv.imread("room_with_grid2.png")
+    img = cv.resize(img, (0, 0), fx=0.4, fy=0.4)
     # Convert to grayscale
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 
-    blur = cv.GaussianBlur(gray, (5, 5), 0)
+    blur = cv.GaussianBlur(gray, (9, 9), 0)
 
-    blur = cv.morphologyEx(blur, cv.MORPH_CLOSE, cv.getStructuringElement(cv.MORPH_RECT, (5, 5)), iterations=2)
+    # blur = cv.morphologyEx(blur, cv.MORPH_CLOSE, cv.getStructuringElement(cv.MORPH_RECT, (5, 5)), iterations=2)
 
     canny = cv.Canny(blur, min_threshold, max_threshold)
-    canny = cv.morphologyEx(canny, cv.MORPH_CLOSE, cv.getStructuringElement(cv.MORPH_RECT, (5, 5)), iterations=2)
+    # canny = cv.morphologyEx(canny, cv.MORPH_CLOSE, cv.getStructuringElement(cv.MORPH_RECT, (5, 5)), iterations=2)
     
     contours, hierarchy = cv.findContours(canny, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-    biggest = []
+    biggest = None
     max_area = 0
     for contour in contours:
         area = cv.contourArea(contour)
@@ -46,16 +46,47 @@ while True:
             peri = cv.arcLength(contour, True)
             approx = cv.approxPolyDP(contour, 0.02 * peri, True)
             if area > max_area and len(approx) == 4:
-                biggest = []
-                biggest.append(approx)
-                print(approx)
+                # biggest = []
+                biggest = contour
+                # print(approx)
                 max_area = area
     
-    cv.drawContours(img, biggest, -1, (0, 255, 0), 2)
+    
+
+    if biggest is not None:
+        cv.drawContours(img, biggest, -1, (0, 255, 0), 2)
+        rect = cv.minAreaRect(biggest)
+        box = cv.boxPoints(rect)
+        box = np.int0(box)
+        cv.drawContours(img, [box], 0, (0, 0, 255), 2)
+
+    elapsed = time.time() - start
+    # if elapsed time is greater than 1 second
+    if elapsed > 4 and previous_contour is not None:
+        # calculate the difference between the current contour and the previous contour
+        difference = cv.matchShapes(box, previous_contour, 2, 0.0)
+        print(difference)
+        # reset timer
+        if difference < 0.1:
+            print("Paper detected")
+        start = time.time()
+        # set previous contour to current contour
+        previous_contour = box
+
+    if previous_contour is None and biggest is not None:
+
+        previous_contour = box
+
+    
+    if biggest is not None:
+        x, y, w, h = cv.boundingRect(box)
+        roi = img[y:y+h, x:x+w]
 
     cv.imshow("Blur", blur)
     cv.imshow("Canny", canny)
     cv.imshow('img', img)
+
+    
 
     # thresh = cv.threshold(gray, min_threshold, 255, cv.THRESH_BINARY_INV)[1]
     # thresh = cv.morphologyEx(thresh, cv.MORPH_OPEN, cv.getStructuringElement(cv.MORPH_RECT, (5, 5)), iterations=1)
