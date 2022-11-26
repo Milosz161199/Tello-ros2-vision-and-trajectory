@@ -7,6 +7,7 @@ from cv_bridge import CvBridge # Package to convert between ROS and OpenCV Image
 import cv2 # OpenCV library
 # from PathDetector import PathDetector
 import numpy as np
+import time
 
 
 class PathGeneratorService(Node):
@@ -18,39 +19,55 @@ class PathGeneratorService(Node):
 
         self.srv = self.create_service(Path, 'path_generator', self.generator_callback)
 
+        self.__image = []
+        self.__image_sub_node = None
+        self.__image_topic = 'video_frames'
+
     def generator_callback(self, request, response):
-        # Convert ROS Image message to OpenCV image
-        image = self.br.imgmsg_to_cv2(request.data)
-        self.__path_detector = PathDetector(image)
-        self.__path_detector.preparePath()
-        
-        x_a, y_a, z_a, pitch_a, roll_a, yaw_a, is_visited_a = self.__path_detector.getArrays()
+        if request.start:
+            self.__image_sub_node = rclpy.create_node('image_subscriber')
+            subscription = self.__image_sub_node.create_subscription(Image, self.__image_topic, self.__listener_callback, 10)
+            subscription  # prevent unused variable warning
+            rclpy.spin_once(self.__image_sub_node)
 
-        if not(self.__validateData(x_a, y_a, z_a, pitch_a, roll_a, yaw_a, is_visited_a)):
-            number_of_points = 0
-            x_a = list()
-            y_a = list()
-            z_a = list()
-            pitch_a = list()
-            roll_a = list()
-            yaw_a = list()
-            is_visited_a = list()
+            while not(len(self.__image)):
+                print("No image! Retry...")
+                subscription = self.__image_sub_node.create_subscription(Image, self.__image_topic, self.__listener_callback, 10)
+                subscription  # prevent unused variable warning
+                rclpy.spin_once(self.__image_sub_node)
+                time.sleep(1000)
+            
+            self.__image_sub_node.destroy_node()
 
+            self.__path_detector = PathDetector(self.__image)
+            self.__path_detector.preparePath()
 
-        # Display image
-        cv2.imshow("camera", image)
-        cv2.waitKey(1)
+            x_a, y_a, z_a, pitch_a, roll_a, yaw_a, is_visited_a = self.__path_detector.getArrays()
 
-        response.number_of_points = len(x_a)
-        response.x = x_a
-        response.y = y_a
-        response.z = z_a
-        response.pitch = pitch_a
-        response.roll = roll_a
-        response.yaw = yaw_a
-        response.is_visited = is_visited_a
+            if not(self.__validateData(x_a, y_a, z_a, pitch_a, roll_a, yaw_a, is_visited_a)):
+                number_of_points = 0
+                x_a = list()
+                y_a = list()
+                z_a = list()
+                pitch_a = list()
+                roll_a = list()
+                yaw_a = list()
+                is_visited_a = list()
 
-        return response
+            # # Display image
+            # cv2.imshow("Image", self.__image)
+            # cv2.waitKey(0)
+
+            response.number_of_points = len(x_a)
+            response.x = list(x_a)
+            response.y = list(y_a)
+            response.z = list(z_a)
+            response.pitch = list(pitch_a)
+            response.roll = list(roll_a)
+            response.yaw = list(yaw_a)
+            response.is_visited = list(is_visited_a)
+
+            return response
 
     def __validateData(self, x_a, y_a, z_a, pitch_a, roll_a, yaw_a, is_visited_a) -> bool:
         if len(x_a) == len(y_a) == len(z_a) == len(pitch_a) == len(roll_a) == len(yaw_a) == len(is_visited_a):
@@ -58,6 +75,16 @@ class PathGeneratorService(Node):
         else:
             return False
 
+    def __listener_callback(self, data):
+        """
+        Callback function.
+        """
+        # Display the message on the console
+        self.__image_sub_node.get_logger().info('Receiving video frame')
+
+        # Convert ROS Image message to OpenCV image
+        self.__image = self.__cv2_bridge.imgmsg_to_cv2(data)
+        
 
 def main(args=None):
     rclpy.init(args=args)
@@ -71,6 +98,7 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
 
 class Colors:
     def __init__(self):
@@ -224,7 +252,7 @@ class PathDetector:
             diff_x = self.__sorted_path[i][0] - self.__sorted_path[i - 1][0]
             diff_y = self.__sorted_path[i][1] - self.__sorted_path[i - 1][1]
             # print("diff_x: ", diff_x, " diff_y: ", diff_y)
-            self.__sorted_path[i][5] = np.round(np.arctan2(diff_y, diff_x) * 180 / np.pi, 2)
+            self.__sorted_path[i][5] = float(np.round(np.arctan2(diff_y, diff_x) * 180 / np.pi, 2))
             # print(self.sorted_trajectory[i][5])
 
     def preparePath(self) -> None:
@@ -372,7 +400,7 @@ class PathDetector:
 class Point3D:
     colors = Colors()
 
-    def __init__(self, x, y, color, pitch=0, roll=0, yaw=0, is_visited=False):
+    def __init__(self, x, y, color, pitch=0.0, roll=0.0, yaw=0.0, is_visited=False):
         self.x = x
         self.y = y
 
@@ -399,5 +427,4 @@ class Point3D:
 
     def getPoint3DArray(self):
         return [self.x, self.y, self.z, self.roll, self.pitch, self.yaw, self.is_visited]
-
 
