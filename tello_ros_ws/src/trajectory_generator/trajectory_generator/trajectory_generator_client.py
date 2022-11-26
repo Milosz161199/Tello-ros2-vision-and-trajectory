@@ -17,13 +17,11 @@ class PathGeneratorClientAsync(Node):
         self.req = Path.Request()
 
     def send_request(self):
-        tmp = sys.argv[1]
-        self.get_logger().info(str(tmp))
-        self.req.image = Image(sys.argv[1])
+        self.req.start = bool(sys.argv[1])
         self.future = self.cli.call_async(self.req)
 
-        # rclpy.spin_until_future_complete(self, self.future)
-        # return self.future.result()
+        rclpy.spin_until_future_complete(self, self.future)
+        return self.future.result()
 
 
 def main(args=None):
@@ -31,6 +29,7 @@ def main(args=None):
 
     path_generator_client = PathGeneratorClientAsync()
     path_generator_client.send_request()
+
     while rclpy.ok():
         rclpy.spin_once(path_generator_client)
         # See if the service has replied
@@ -41,7 +40,7 @@ def main(args=None):
                 path_generator_client.get_logger().info(
                     'Service call failed %r' % (e,))
             else:
-                path_generator_client.get_logger().info('Result')
+                   path_generator_client.get_logger().info('Result %d' % (response.number_of_points))
             break
  
     path_generator_client.destroy_node()
