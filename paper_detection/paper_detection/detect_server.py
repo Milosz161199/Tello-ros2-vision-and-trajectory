@@ -154,12 +154,15 @@ class DetectActionServer(Node):
                     roi = img[y:y+h, x:x+w]
                     roi = self.perspective_transformation(img, warp_box)
                     cv2.imwrite('roi.png', roi)
+                    cv2.imshow('image', roi)
                     self.__image_ros = self.__br.cv2_to_imgmsg(roi)
-                    return self.__image_ros 
+                    return self.__image_ros
+                 
                 start = time.time()
                 # set previous contour to current contour
                 previous_contour = box
-
+            cv2.imshow('frame', img)
+            cv2.waitKey(1)
             if previous_contour is None and biggest is not None:
                 previous_contour = box      
             
