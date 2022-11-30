@@ -13,6 +13,9 @@ from Colors import Colors
 from Point3D import Point3D
 from PathDetector import PathDetector
 
+# from threading import Thread
+from djitellopy import Tello
+
 
 class DetectActionServer(Node):
     def __init__(self):
@@ -22,6 +25,8 @@ class DetectActionServer(Node):
             Detect,
             'Detect',
             self.execute_callback)
+
+        self.__tello = Tello()
         
         self.__path_detector = None
         self.__image = []
@@ -93,8 +98,13 @@ class DetectActionServer(Node):
         
 
     def detect_paper(self):
+        self.__tello.connect()
+        self.__tello.streamon()
+        # frame_read = tello.get_frame_read()        
+
+        
         # Load the webcam
-        cap = cv2.VideoCapture(0)
+        # cap = cv2.VideoCapture(0)
         previous_contour = None
 
         # start timer
@@ -102,7 +112,8 @@ class DetectActionServer(Node):
 
         while True:
             # Read the webcam
-            _, img = cap.read()
+            # _, img = cap.read()
+            img = self.__tello.get_frame_read()
             # img = cv2.imread("src/ARL_PROJ_GRUPA_IV/paper_detection/paper_detection/room_with_grid2.png")
             
             # Convert to grayscale
@@ -167,7 +178,8 @@ class DetectActionServer(Node):
                 previous_contour = box      
             
         # Release the webcam
-        cap.release()
+        # cap.release()
+        
 
         # Close all windows
         cv2.destroyAllWindows()
