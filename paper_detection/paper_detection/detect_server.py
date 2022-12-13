@@ -13,23 +13,41 @@ from Colors import Colors
 from Point3D import Point3D
 from PathDetector import PathDetector
 
+# from threading import Thread
+from djitellopy import Tello
+import time
+
 import matplotlib.pyplot as plt
+
 
 class DetectActionServer(Node):
     def __init__(self):
         super().__init__('detect_action_server')
+
+        self.subscription = self.create_subscription(
+            Image,
+            'image_raw',
+            self.listener_callback,
+            10)
+        self.subscription  # prevent unused variable warning
+
         self._action_server = ActionServer(
             self,
             Detect,
             'Detect',
             self.execute_callback)
-        
+
+        # self.__tello = Tello()
+        self.image = None
+
         self.__path_detector = None
         self.__image = []
         self.__image_ros = Image()
         self.__br = CvBridge()
         self.__result = None
         
+    def listener_callback(self, msg):
+        self.image = cv2.imgmsg_to_cv2(msg.data)
 
     def execute_callback(self, goal_handle):
         self.get_logger().info('Executing goal...')
@@ -110,25 +128,44 @@ class DetectActionServer(Node):
         
 
     def detect_paper(self):
+        # self.__tello.connect()
+        # self.__tello.streamon()
+        # frame_read = self.__tello.get_frame_read()        
+
+        cv2.namedWindow("Trackbars")
+        cv2.createTrackbar("Min Threshold", "Trackbars", 17, 250, lambda x: None)
+        cv2.createTrackbar("Max Threshold", "Trackbars", 70, 250, lambda x: None)
+        
         # Load the webcam
-        cap = cv2.VideoCapture(0)
+        # cap = cv2.VideoCapture('src/paper_detection/paper_detection/video_2.avi')
         previous_contour = None
+
+
 
         # start timer
         start = time.time()
 
         while True:
             # Read the webcam
-            _, img = cap.read()
+            # _, img = cap.read()
+            if self.image is None:
+                continue
+            img = self.image
+
+            min_threshold = cv2.getTrackbarPos("Min Threshold", "Trackbars")
+            max_threshold = cv2.getTrackbarPos("Max Threshold", "Trackbars")
+            # img = self.__tello.get_frame_read().frame
+            # print(img.shape)
             # img = cv2.imread("src/ARL_PROJ_GRUPA_IV/paper_detection/paper_detection/room_with_grid2.png")
-            
+            # if img == None or len(img) == 0:
+            #     continue
             # Convert to grayscale
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
             blur = cv2.GaussianBlur(gray, (5, 5), 0)
             blur = cv2.morphologyEx(blur, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5)), iterations=2)
 
-            canny = cv2.Canny(blur, 30, 50)
+            canny = cv2.Canny(blur, min_threshold, max_threshold)
             canny = cv2.morphologyEx(canny, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5)), iterations=2)
             
             contours, hierarchy = cv2.findContours(canny, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -180,15 +217,20 @@ class DetectActionServer(Node):
                 # set previous contour to current contour
                 previous_contour = box
             cv2.imshow('frame', img)
+            cv2.imshow('Trackbars', canny)
             cv2.waitKey(1)
             if previous_contour is None and biggest is not None:
                 previous_contour = box      
+            time.sleep(0.1)
+            
             
         # Release the webcam
-        cap.release()
+        # cap.release()
+        
 
         # Close all windows
         cv2.destroyAllWindows()
+        
 
 
 def main(args=None):
