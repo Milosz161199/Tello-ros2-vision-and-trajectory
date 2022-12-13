@@ -13,6 +13,7 @@ from Colors import Colors
 from Point3D import Point3D
 from PathDetector import PathDetector
 
+import matplotlib.pyplot as plt
 
 class DetectActionServer(Node):
     def __init__(self):
@@ -38,6 +39,13 @@ class DetectActionServer(Node):
         self.__image_ros = self.detect_paper()
         self.__image = self.__br.imgmsg_to_cv2(self.__image_ros)
 
+        ''' BEGIN TO DELETE '''
+        # self.__image = cv2.imread("src/paper_detection/paper_detection/roi.png")
+        # cv2.imshow('image to find path', self.__image)
+        # cv2.waitKey(5000)
+        # cv2.destroyAllWindows()
+        ''' END TO DELETE '''
+
         self.__path_detector = PathDetector(self.__image)
         self.__path_detector.preparePath()
 
@@ -52,12 +60,14 @@ class DetectActionServer(Node):
             roll_a = list()
             yaw_a = list()
             is_visited_a = list()
+            goal_handle.abort()
+            return self.__result
 
         goal_handle.succeed()
 
-        self.__result  = Detect.Result()
+        self.__result = Detect.Result()
 
-        self.__result.number_of_points = 0
+        self.__result.number_of_points = len(list(x_a))
         self.__result.x = list(x_a)
         self.__result.y = list(y_a)
         self.__result.z = list(z_a)
@@ -65,6 +75,13 @@ class DetectActionServer(Node):
         self.__result.roll = list(roll_a)
         self.__result.yaw = list(yaw_a)
         self.__result.is_visited = list(is_visited_a)
+
+        ''' BEGIN TO DELETE '''
+        plt.scatter(list(x_a), list(y_a), s=1)
+        plt.xlabel('X-axis')
+        plt.ylabel('Y-axis')
+        plt.show()
+        ''' END TO DELETE '''
 
         return self.__result
 
@@ -155,6 +172,7 @@ class DetectActionServer(Node):
                     roi = self.perspective_transformation(img, warp_box)
                     cv2.imwrite('roi.png', roi)
                     cv2.imshow('image', roi)
+                    cv2.waitKey(2000)
                     self.__image_ros = self.__br.cv2_to_imgmsg(roi)
                     return self.__image_ros
                  
