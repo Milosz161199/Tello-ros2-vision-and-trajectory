@@ -44,12 +44,6 @@ class DetectActionServer(Node):
         self.__image_ros = Image()
         self.__br = CvBridge()
         self.__result = None
-
-        self.subscription = self.create_subscription(
-            String,
-            'topic',
-            self.listener_callback,
-            10)
         
     def listener_callback(self, msg):
         self.image = cv2.imgmsg_to_cv2(msg.data)
@@ -129,8 +123,7 @@ class DetectActionServer(Node):
         # cap = cv2.VideoCapture('src/paper_detection/paper_detection/video_2.avi')
         previous_contour = None
 
-        if self.image is None:
-            continue
+
 
         # start timer
         start = time.time()
@@ -138,6 +131,10 @@ class DetectActionServer(Node):
         while True:
             # Read the webcam
             # _, img = cap.read()
+            if self.image is None:
+                continue
+            img = self.image
+
             min_threshold = cv2.getTrackbarPos("Min Threshold", "Trackbars")
             max_threshold = cv2.getTrackbarPos("Max Threshold", "Trackbars")
             # img = self.__tello.get_frame_read().frame
