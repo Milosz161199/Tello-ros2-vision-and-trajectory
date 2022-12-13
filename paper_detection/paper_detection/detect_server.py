@@ -13,6 +13,7 @@ from Colors import Colors
 from Point3D import Point3D
 from PathDetector import PathDetector
 
+import matplotlib.pyplot as plt
 
 class DetectActionServer(Node):
     def __init__(self):
@@ -34,10 +35,13 @@ class DetectActionServer(Node):
         self.get_logger().info('Executing goal...')
 
         sequence = [0, 1]
-
-        self.__image_ros = self.detect_paper()
-        self.__image = self.__br.imgmsg_to_cv2(self.__image_ros)
-
+        # fig = plt.figure()
+        # self.__image_ros = self.detect_paper()
+        # self.__image = self.__br.imgmsg_to_cv2(self.__image_ros)
+        self.__image = cv2.imread("src/paper_detection/roi.png")
+        cv2.imshow('image to find path', self.__image)
+        cv2.waitKey(5000)
+        cv2.destroyAllWindows()
         self.__path_detector = PathDetector(self.__image)
         self.__path_detector.preparePath()
 
@@ -52,12 +56,14 @@ class DetectActionServer(Node):
             roll_a = list()
             yaw_a = list()
             is_visited_a = list()
+            goal_handle.abort()
+            return self.__result
 
         goal_handle.succeed()
 
         self.__result  = Detect.Result()
 
-        self.__result.number_of_points = 0
+        self.__result.number_of_points = len(list(x_a))
         self.__result.x = list(x_a)
         self.__result.y = list(y_a)
         self.__result.z = list(z_a)
@@ -65,6 +71,11 @@ class DetectActionServer(Node):
         self.__result.roll = list(roll_a)
         self.__result.yaw = list(yaw_a)
         self.__result.is_visited = list(is_visited_a)
+
+        plt.scatter(list(x_a), list(y_a), s=1)
+        plt.xlabel('X-axis')
+        plt.ylabel('Y-axis')
+        plt.show()
 
         return self.__result
 
@@ -102,8 +113,8 @@ class DetectActionServer(Node):
 
         while True:
             # Read the webcam
-            _, img = cap.read()
-            # img = cv2.imread("src/ARL_PROJ_GRUPA_IV/paper_detection/paper_detection/room_with_grid2.png")
+            # _, img = cap.read()
+            img = cv2.imread("src/paper_detection/paper_detection/roi.png")
             
             # Convert to grayscale
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -153,13 +164,16 @@ class DetectActionServer(Node):
                     x, y, w, h = cv2.boundingRect(box)
                     roi = img[y:y+h, x:x+w]
                     roi = self.perspective_transformation(img, warp_box)
-                    cv2.imwrite('roi.png', roi)
+                    # cv2.imwrite('roi.png', roi)
+                    cv2.imshow('image', roi)
                     self.__image_ros = self.__br.cv2_to_imgmsg(roi)
-                    return self.__image_ros 
+                    return self.__image_ros
+                 
                 start = time.time()
                 # set previous contour to current contour
                 previous_contour = box
-
+            cv2.imshow('frame', img)
+            cv2.waitKey(1)
             if previous_contour is None and biggest is not None:
                 previous_contour = box      
             
