@@ -14,7 +14,7 @@ from Point3D import Point3D
 from PathDetector import PathDetector
 
 # from threading import Thread
-from djitellopy import Tello
+# from djitellopy import Tello
 import time
 
 import matplotlib.pyplot as plt
@@ -54,14 +54,14 @@ class DetectActionServer(Node):
 
         sequence = [0, 1]
 
-        self.__image_ros = self.detect_paper()
-        self.__image = self.__br.imgmsg_to_cv2(self.__image_ros)
+        # self.__image_ros = self.detect_paper()
+        # self.__image = self.__br.imgmsg_to_cv2(self.__image_ros)
 
         ''' BEGIN TO DELETE '''
-        # self.__image = cv2.imread("src/paper_detection/paper_detection/roi.png")
-        # cv2.imshow('image to find path', self.__image)
-        # cv2.waitKey(5000)
-        # cv2.destroyAllWindows()
+        self.__image = cv2.imread("src/roi.png")
+        cv2.imshow('image to find path', self.__image)
+        cv2.waitKey(1000)
+        cv2.destroyAllWindows()
         ''' END TO DELETE '''
 
         self.__path_detector = PathDetector(self.__image)
@@ -96,6 +96,7 @@ class DetectActionServer(Node):
 
         ''' BEGIN TO DELETE '''
         plt.scatter(list(x_a), list(y_a), s=1)
+        plt.plot(list(x_a), list(y_a))
         plt.xlabel('X-axis')
         plt.ylabel('Y-axis')
         plt.show()
