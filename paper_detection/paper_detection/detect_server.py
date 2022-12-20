@@ -17,17 +17,23 @@ from PathDetector import PathDetector
 from djitellopy import Tello
 import time
 
+# class Thread_XYZ(threading.Thread):
+#     def __init__(self):
+#         threading.Thread.__init__(self)
+       
+#     def run(self):
+# 	  pass
+
 
 
 class DetectActionServer(Node):
     def __init__(self):
         super().__init__('detect_action_server')
-
         self.subscription = self.create_subscription(
             Image,
-            'image_raw',
+            'drone1/image_raw',
             self.listener_callback,
-            10)
+            10) 
         self.subscription  # prevent unused variable warning
 
         self._action_server = ActionServer(
@@ -46,7 +52,8 @@ class DetectActionServer(Node):
         self.__result = None
         
     def listener_callback(self, msg):
-        self.image = cv2.imgmsg_to_cv2(msg.data)
+        self.image = self.__br.imgmsg_to_cv2(msg)
+        print(1)
 
     def execute_callback(self, goal_handle):
         self.get_logger().info('Executing goal...')
@@ -129,6 +136,7 @@ class DetectActionServer(Node):
         start = time.time()
 
         while True:
+
             # Read the webcam
             # _, img = cap.read()
             if self.image is None:
@@ -192,6 +200,7 @@ class DetectActionServer(Node):
                     roi = self.perspective_transformation(img, warp_box)
                     cv2.imwrite('roi.png', roi)
                     cv2.imshow('image', roi)
+                    cv2.waitKey(1000)
                     self.__image_ros = self.__br.cv2_to_imgmsg(roi)
                     return self.__image_ros
                  
@@ -204,7 +213,7 @@ class DetectActionServer(Node):
             if previous_contour is None and biggest is not None:
                 previous_contour = box      
             time.sleep(0.1)
-            
+            rclpy.spin_once(self)
             
         # Release the webcam
         # cap.release()
