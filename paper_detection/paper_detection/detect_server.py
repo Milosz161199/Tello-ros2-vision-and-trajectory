@@ -14,16 +14,10 @@ from Point3D import Point3D
 from PathDetector import PathDetector
 
 # from threading import Thread
-from djitellopy import Tello
+# from djitellopy import Tello
 import time
 
-# class Thread_XYZ(threading.Thread):
-#     def __init__(self):
-#         threading.Thread.__init__(self)
-       
-#     def run(self):
-# 	  pass
-
+import matplotlib.pyplot as plt
 
 
 class DetectActionServer(Node):
@@ -60,8 +54,15 @@ class DetectActionServer(Node):
 
         sequence = [0, 1]
 
-        self.__image_ros = self.detect_paper()
-        self.__image = self.__br.imgmsg_to_cv2(self.__image_ros)
+        # self.__image_ros = self.detect_paper()
+        # self.__image = self.__br.imgmsg_to_cv2(self.__image_ros)
+
+        ''' BEGIN TO DELETE '''
+        self.__image = cv2.imread("src/roi.png")
+        cv2.imshow('image to find path', self.__image)
+        cv2.waitKey(1000)
+        cv2.destroyAllWindows()
+        ''' END TO DELETE '''
 
         self.__path_detector = PathDetector(self.__image)
         self.__path_detector.preparePath()
@@ -77,12 +78,14 @@ class DetectActionServer(Node):
             roll_a = list()
             yaw_a = list()
             is_visited_a = list()
+            goal_handle.abort()
+            return self.__result
 
         goal_handle.succeed()
 
-        self.__result  = Detect.Result()
+        self.__result = Detect.Result()
 
-        self.__result.number_of_points = 0
+        self.__result.number_of_points = len(list(x_a))
         self.__result.x = list(x_a)
         self.__result.y = list(y_a)
         self.__result.z = list(z_a)
@@ -90,6 +93,14 @@ class DetectActionServer(Node):
         self.__result.roll = list(roll_a)
         self.__result.yaw = list(yaw_a)
         self.__result.is_visited = list(is_visited_a)
+
+        ''' BEGIN TO DELETE '''
+        plt.scatter(list(x_a), list(y_a), s=1)
+        plt.plot(list(x_a), list(y_a))
+        plt.xlabel('X-axis')
+        plt.ylabel('Y-axis')
+        plt.show()
+        ''' END TO DELETE '''
 
         return self.__result
 
