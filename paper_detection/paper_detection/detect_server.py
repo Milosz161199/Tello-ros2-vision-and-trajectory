@@ -91,7 +91,6 @@ class DetectActionServer(Node):
 
         self.__result.number_of_points = len(list(x_a))
         self.__result.x = list(x_a)
-        print(self.__result.x)
         self.__result.y = list(y_a)
         self.__result.z = list(z_a)
         self.__result.pitch = list(pitch_a)
@@ -217,10 +216,10 @@ class DetectActionServer(Node):
             if elapsed > 4 and previous_contour is not None:
                 # calculate the difference between the current contour and the previous contour
                 difference = cv2.matchShapes(box, previous_contour, 2, 0.0)
-                print(difference)
+                # print(difference)
                 # reset timer
                 if difference < 0.1 and biggest is not None:
-                    print("Paper detected")
+                    print("Paper detected!")
                     x, y, w, h = cv2.boundingRect(box)
                     roi = img[y:y+h, x:x+w]
                     roi = self.perspective_transformation(img, warp_box)

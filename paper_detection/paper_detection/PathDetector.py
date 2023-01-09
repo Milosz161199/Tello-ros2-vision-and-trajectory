@@ -2,9 +2,8 @@ import cv2
 import numpy as np
 
 from Point3D import *
-from itertools import groupby, product
-import statistics
-from statistics import mode
+
+from tqdm import tqdm
 
 DEBUG_MODE = False
 
@@ -33,12 +32,13 @@ class PathDetector:
         self.__CLASSROOM_MIN_Y = -1.5
         self.__CLASSROOM_MAX_Y =  1.5 
 
-        self.__HOW_OFTEN = 6 # 2 
+        self.__HOW_OFTEN = 2 # 2 
 
         self.__start_point = Point3D(self.__IMAGE_MIN_X + 20, self.__IMAGE_MAX_Y + 20, [0, 0, 0])
         
         self.__path = []
         self.__sorted_path = [self.__start_point.getPoint3DArray()]
+        self.__sorted_path2 = list()
 
         self.__blue_lower = np.array([94, 80, 2])
         self.__blue_upper = np.array([120, 255, 255])
@@ -75,36 +75,18 @@ class PathDetector:
         
         return img_res
 
-    def __manhattan(self, tup1, tup2):
-        return abs(tup1[0] - tup2[0]) + abs(tup1[1] - tup2[1])
-    
-    def __distance(self, tup1, tup2):
-        return np.sqrt((tup1[0] - tup2[0]) ** 2 + (tup1[1] - tup2[1]) ** 2 )
-
-    def __groupPoints(self, path, distance):
-        # initializing list
-        test_list = list()
-        result_array = list()
-
-        for point in path:
-            test_list.append(tuple(point))
-                
-        # Group Adjacent Coordinates
-        # Using product() + groupby() + list comprehension
-        man_tups = [sorted(sub) for sub in product(test_list, repeat = 2)
-                                                if self.__manhattan(*sub) <= distance]
+    def __groupPoints(self, path, distance):  
+        print("Starting group points in path...")     
+        result_array = path
         
-        res_dict = {ele: {ele} for ele in test_list}
-        for tup1, tup2 in man_tups:
-            res_dict[tup1] |= res_dict[tup2]
-            res_dict[tup2] = res_dict[tup1]
-        
-        res = [[*next(val)] for key, val in groupby(
-                sorted(res_dict.values(), key = id), id)]
-
-        for group in res:
-            middle_index = int(len(group) / 2.0)
-            result_array.append(list(group[middle_index]))
+        for i, res_point in enumerate(result_array):
+            for j, point in enumerate(path):
+                dist = np.sqrt((res_point[0] - point[0]) ** 2 + 
+                               (res_point[1] - point[1]) ** 2 + 
+                               (res_point[2] - point[2]) ** 2)
+                if dist <= distance:
+                    if point in result_array:
+                        result_array.remove(point)
 
         return result_array
 
@@ -112,12 +94,41 @@ class PathDetector:
         return self.__sorted_path
 
     def __sortPoints(self, path :list) -> None:
+        print("First sorting path...")
         while path:
             path.sort(key=lambda point3d: np.sqrt((point3d[0] - self.__sorted_path[-1][0]) ** 2 + (point3d[1] - self.__sorted_path[-1][1]) ** 2 + (point3d[2] - self.__sorted_path[-1][2]) ** 2))
             self.__sorted_path.append(path[0])
             path.pop(0)
 
+    def __sortPoints2(self, path :list) -> None:
+        print("Second sorting path...")
+        while path:
+            path.sort(key=lambda point3d: np.sqrt((point3d[0] - self.__sorted_path2[-1][0]) ** 2 + (point3d[1] - self.__sorted_path2[-1][1]) ** 2 + (point3d[2] - self.__sorted_path2[-1][2]) ** 2))
+            self.__sorted_path2.append(path[0])
+            path.pop(0)
+
+    def __correctStartPointToPath(self) -> None:
+        print("Correcting path...")
+        start_point = self.__sorted_path[0]
+        self.__sorted_path.pop(0)
+        
+        arr = np.zeros((len(self.__sorted_path), len(self.__sorted_path)))
+        
+        for i, res_point in enumerate(self.__sorted_path):
+            for j, point in enumerate(self.__sorted_path):
+                dist = np.sqrt((res_point[0] - point[0]) ** 2 + 
+                               (res_point[1] - point[1]) ** 2 + 
+                               (res_point[2] - point[2]) ** 2)
+                arr[i][j] = dist
+                
+        index = np.unravel_index(arr.argmax(), arr.shape)
+
+        self.__sorted_path2 = [self.__sorted_path[index[0]]]
+        self.__sortPoints2(self.__sorted_path)
+        self.__sorted_path = self.__sorted_path2
+
     def __findWrongPoints(self):
+        print("Removing wrong points...")
         path_tmp = [self.__start_point.getPoint3DArray()]
         for i in range(len(self.__sorted_path) - 1):
             distance = np.sqrt((self.__sorted_path[i][0] - self.__sorted_path[i+1][0]) ** 2 + (self.__sorted_path[i][1] - self.__sorted_path[-1][1]) ** 2 )
@@ -125,7 +136,7 @@ class PathDetector:
                 path_tmp.append(self.__sorted_path[i])
         self.__sorted_path.clear()
         self.__sorted_path = path_tmp    
-    
+
     def __findCommonDistanceBetweenPoints(self, path :list()) -> float:
         distance_array = list()
         for i in range(len(path) - 1):
@@ -133,7 +144,7 @@ class PathDetector:
             distance_array.append(distance)
 
         return min(distance_array)
-        
+
     def __calculateYaw(self) -> None:
         for i in range(1, len(self.__sorted_path)):
             diff_x = self.__sorted_path[i][0] - self.__sorted_path[i - 1][0]
@@ -143,24 +154,24 @@ class PathDetector:
                 print(f"diff_x: {diff_x}, diff_y: {diff_y}, yaw: {self.sorted_trajectory[i][5]}")
 
     def preparePath(self) -> None:
+        print("Preparing path...")
         self.__wayOfDetect()
-        distance = np.sqrt(np.power(self.__square_cx, 2) + np.power(self.__square_cy, 2))
-        tmp_path = self.__groupPoints(self.__path, distance + .2)
-        distance = self.__findCommonDistanceBetweenPoints(tmp_path) 
-        self.__path = self.__groupPoints(tmp_path, distance + .2)
+        distance = (self.__IMAGE_MAX_X / self.__w_count) * self.__HOW_OFTEN * 3.0
+        self.__path = self.__groupPoints(self.__path, distance + .2)
+        distance = self.__findCommonDistanceBetweenPoints(self.__path) 
+        self.__path = self.__groupPoints(self.__path, distance + .2)
         self.__sortPoints(self.__path)
+        self.__correctStartPointToPath()
         self.__findWrongPoints() 
         self.__calculateYaw()
+        print("Finished!")
 
     def __wayOfDetect(self) -> None:
         self.__createMasks()
-
-        # array_of_points_to_check = list()
         height, width = self.__img_color.shape[:2]
 
         square_a = width / self.__w_count
         square_b = height / self.__h_count
-        print(square_a, square_b)
 
         self.__diff_square = np.abs(square_a - square_b)
 
@@ -172,7 +183,8 @@ class PathDetector:
         self.__square_cy = square_b / 2.0
 
         # create points to check
-        for h in range(int(self.__square_cy), int(height), int(self.__HOW_OFTEN * self.__square_cy)):
+        
+        for h in tqdm(range(int(self.__square_cy), int(height), int(self.__HOW_OFTEN * self.__square_cy))):
             for w in range(int(self.__square_cx), int(width), int(self.__HOW_OFTEN * self.__square_cx)):
                 # array_of_points_to_check.append([h, w])
                 point = [h, w]
