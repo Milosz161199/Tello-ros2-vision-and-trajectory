@@ -48,7 +48,7 @@ Klienta odpowiadającego za sterowanie dronem:
 python3 src/drone_control/drone_control/control_client.py
 ```
 
-Następnie żądanie akcji:
+Żądanie akcji:
 ```
 ros2 action send_goal /Detect action_detect/action/Detect order:\ 0
 ```
