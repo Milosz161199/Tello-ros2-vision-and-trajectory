@@ -3,41 +3,39 @@ import numpy as np
 
 from Point3D import *
 from itertools import groupby, product
- 
+import statistics
+from statistics import mode
 
 DEBUG_MODE = False
 
 class PathDetector:
     def __init__(self, image):
-        self.__img_color = image    
-
-        # ksize = (5, 5)
-        # self.__img_color = cv2.medianBlur(self.__img_color, 3)         
+        
+        self.__img_color = self.__trimImage(image) 
         self.__img_hsv = cv2.cvtColor(self.__img_color, cv2.COLOR_BGR2HSV)
-        # self.__img_color = cv2.cvtColor(self.__img_color, cv2.COLOR_BGR2RGB)
 
-        # count of squers
-        self.__w_count = 55
-        self.__h_count = 38
+        # count of squares
+        self.__w_count = 55 * 4 # 55
+        self.__h_count = 38 * 4 # 38
         self.__diff_square = 0.0
         self.__square_cx = 0.0
         self.__square_cy = 0.0
 
         # Image shape
-        self.__IMAGE_MIN_X = 0.0
+        self.__IMAGE_MIN_X = 0
         self.__IMAGE_MAX_X = self.__img_color.shape[0]
-        self.__IMAGE_MIN_Y = 0.0
+        self.__IMAGE_MIN_Y = 0
         self.__IMAGE_MAX_Y = self.__img_color.shape[1]
 
         # Classroom shape
-        self.__CLASSROOM_MIN_X = -2.5   # 0.0 
-        self.__CLASSROOM_MAX_X =  2.5   # 180.0 
-        self.__CLASSROOM_MIN_Y = -1.5   # 0.0
-        self.__CLASSROOM_MAX_Y =  1.5   # 400.0
+        self.__CLASSROOM_MIN_X = -2.5 
+        self.__CLASSROOM_MAX_X =  2.5 
+        self.__CLASSROOM_MIN_Y = -1.5
+        self.__CLASSROOM_MAX_Y =  1.5 
 
-        self.__HOW_OFTEN = 2 # 2 
+        self.__HOW_OFTEN = 6 # 2 
 
-        self.__start_point = Point3D(int(self.__IMAGE_MIN_X), int(self.__IMAGE_MAX_Y), [0, 0, 0])
+        self.__start_point = Point3D(self.__IMAGE_MIN_X + 20, self.__IMAGE_MAX_Y + 20, [0, 0, 0])
         
         self.__path = []
         self.__sorted_path = [self.__start_point.getPoint3DArray()]
@@ -69,8 +67,19 @@ class PathDetector:
         self.__red_mask = None
         self.__blue_mask = None
 
-    def __Manhattan(self, tup1, tup2):
+    def __trimImage(self, image):
+        height, width = image.shape[:2]
+        x_trim = int(width * 0.025)
+        y_trim = int(height * 0.025)
+        img_res = image[y_trim: height-y_trim, x_trim:width-x_trim]
+        
+        return img_res
+
+    def __manhattan(self, tup1, tup2):
         return abs(tup1[0] - tup2[0]) + abs(tup1[1] - tup2[1])
+    
+    def __distance(self, tup1, tup2):
+        return np.sqrt((tup1[0] - tup2[0]) ** 2 + (tup1[1] - tup2[1]) ** 2 )
 
     def __groupPoints(self, path, distance):
         # initializing list
@@ -83,7 +92,7 @@ class PathDetector:
         # Group Adjacent Coordinates
         # Using product() + groupby() + list comprehension
         man_tups = [sorted(sub) for sub in product(test_list, repeat = 2)
-                                                if self.__Manhattan(*sub) <= distance]
+                                                if self.__manhattan(*sub) <= distance]
         
         res_dict = {ele: {ele} for ele in test_list}
         for tup1, tup2 in man_tups:
@@ -99,11 +108,6 @@ class PathDetector:
 
         return result_array
 
-    def __changePositionOfCoordinateSystem(self) -> None:
-        for i in range(1, len(self.__sorted_path)):
-            self.__sorted_path[i][0] = int(self.__sorted_path[i][0] - int(self.__CLASSROOM_MAX_X / 2))
-            self.__sorted_path[i][1] = int(self.__sorted_path[i][1] + int(self.__CLASSROOM_MAX_Y / 2))
-
     def getPath(self):
         return self.__sorted_path
 
@@ -114,16 +118,13 @@ class PathDetector:
             path.pop(0)
 
     def __findWrongPoints(self):
-        path_tmp = list()
+        path_tmp = [self.__start_point.getPoint3DArray()]
         for i in range(len(self.__sorted_path) - 1):
             distance = np.sqrt((self.__sorted_path[i][0] - self.__sorted_path[i+1][0]) ** 2 + (self.__sorted_path[i][1] - self.__sorted_path[-1][1]) ** 2 )
             if distance <= (self.__IMAGE_MAX_X * 0.8):
                 path_tmp.append(self.__sorted_path[i])
         self.__sorted_path.clear()
         self.__sorted_path = path_tmp    
-    
-    def __mostFrequent(self, list : list()) -> float:
-        return max(set(list), key = list.count)
     
     def __findCommonDistanceBetweenPoints(self, path :list()) -> float:
         distance_array = list()
@@ -142,16 +143,16 @@ class PathDetector:
                 print(f"diff_x: {diff_x}, diff_y: {diff_y}, yaw: {self.sorted_trajectory[i][5]}")
 
     def preparePath(self) -> None:
-        self.__newWayOfDetect()
+        self.__wayOfDetect()
         distance = np.sqrt(np.power(self.__square_cx, 2) + np.power(self.__square_cy, 2))
         tmp_path = self.__groupPoints(self.__path, distance + .2)
-        distance = self.__findCommonDistanceBetweenPoints(tmp_path)
+        distance = self.__findCommonDistanceBetweenPoints(tmp_path) 
         self.__path = self.__groupPoints(tmp_path, distance + .2)
         self.__sortPoints(self.__path)
         self.__findWrongPoints() 
         self.__calculateYaw()
 
-    def __newWayOfDetect(self) -> None:
+    def __wayOfDetect(self) -> None:
         self.__createMasks()
 
         # array_of_points_to_check = list()
@@ -171,8 +172,8 @@ class PathDetector:
         self.__square_cy = square_b / 2.0
 
         # create points to check
-        for h in range(int(self.__square_cy), int(height), self.__HOW_OFTEN * int(self.__square_cy)):
-            for w in range(int(self.__square_cx), int(width), self.__HOW_OFTEN * int(self.__square_cx)):
+        for h in range(int(self.__square_cy), int(height), int(self.__HOW_OFTEN * self.__square_cy)):
+            for w in range(int(self.__square_cx), int(width), int(self.__HOW_OFTEN * self.__square_cx)):
                 # array_of_points_to_check.append([h, w])
                 point = [h, w]
                 color = self.__witchColor(point)
@@ -183,16 +184,10 @@ class PathDetector:
                 if DEBUG_MODE:
                     point3d.showPoint()
                 self.__path.append(point3d.getPoint3DArray())
-
-        
-
-        # print("trajectory len: ", len(self.__path))
-        # print(array_of_points_to_check)
-        # print("len: ", len(array_of_points_to_check))
-        # print("real len: ", w_count * h_count)
-        # del self.__path[::10]
-        print("trajectory len: ", len(self.__path))
-        # cv2.imwrite("res.png", self.__img_color)
+        cv2.imwrite('roi2.png', self.__img_color)
+        if DEBUG_MODE:
+            print("trajectory len: ", len(self.__path))
+            cv2.imwrite("res.png", self.__img_color)
 
     def __isBlue(self, point) -> bool:
         if str(self.__blue_mask[point[0], point[1]]) != "[0 0 0]":
@@ -244,28 +239,36 @@ class PathDetector:
         mask_2 = cv2.inRange(self.__img_hsv, self.__red_lower_2, self.__red_upper_2)
         mask = mask_0 + mask_1 + mask_2
         self.__red_mask = cv2.bitwise_and(self.__img_color, self.__img_color, mask=mask)
-        # cv2.imshow("RED", self.__red_mask)
+        
+        if DEBUG_MODE:
+            cv2.imshow("RED", self.__red_mask)
 
     def __createBlueColorMask(self) -> None:
         mask_0 = cv2.inRange(self.__img_hsv, self.__blue_lower, self.__blue_upper)
         mask_1 = cv2.inRange(self.__img_hsv, self.__blue_lower_1, self.__blue_upper_1)
         mask = mask_0 + mask_1
         self.__blue_mask = cv2.bitwise_and(self.__img_color, self.__img_color, mask=mask)
-        # cv2.imshow("BLUE", self.__blue_mask)
+        
+        if DEBUG_MODE:
+            cv2.imshow("BLUE", self.__blue_mask)
 
     def __createGreenColorMask(self) -> None:
         mask_0 = cv2.inRange(self.__img_hsv, self.__green_lower, self.__green_upper)
         mask_1 = cv2.inRange(self.__img_hsv, self.__green_lower_1, self.__green_upper_1)
         mask = mask_0 + mask_1
         self.__green_mask = cv2.bitwise_and(self.__img_color, self.__img_color, mask=mask)
-        # cv2.imshow("GREEN", self.__green_mask)
+        
+        if DEBUG_MODE:
+            cv2.imshow("GREEN", self.__green_mask)
 
     def __createYellowColorMask(self) -> None:
         mask_0 = cv2.inRange(self.__img_hsv, self.__yellow_lower, self.__yellow_upper)
         mask_1 = cv2.inRange(self.__img_hsv, self.__yellow_lower_1, self.__yellow_upper_1)
         mask = mask_0 + mask_1
         self.__yellow_mask = cv2.bitwise_and(self.__img_color, self.__img_color, mask=mask)
-        # cv2.imshow("YELLOW", self.__yellow_mask)
+        
+        if DEBUG_MODE:
+            cv2.imshow("YELLOW", self.__yellow_mask)
 
     def __createMasks(self) -> None:
         self.__createYellowColorMask()
@@ -283,7 +286,6 @@ class PathDetector:
                 norm_arr.append(float(0.0))
         else:
             for i in arr:
-                # temp = t_min + (((i-t_min)*(diff))/(t_max-t_min))
                 temp = (((i - min(arr)) * diff) / diff_arr) + t_min
                 norm_arr.append(float(temp))
         return norm_arr
@@ -306,24 +308,6 @@ class PathDetector:
         
         return normalized_array_1d
 
-    def __normalizeArray2(self, array_1d: list, ax: str) -> list():
-        # gives range starting from 1 and ending at 3
-        range_to_normalize = (0, 0)
-        if ax == "x":
-            range_to_normalize = (self.__CLASSROOM_MIN_X, self.__CLASSROOM_MAX_X)
-        elif ax == "y":
-            range_to_normalize = (self.__CLASSROOM_MIN_Y, self.__CLASSROOM_MAX_Y)
-            
-        normalized_array_1d = self.__normalize2(array_1d,
-                                        range_to_normalize[0],
-                                        range_to_normalize[1])
-        if DEBUG_MODE:
-            # display original and normalized array
-            print("Original Array = ", array_1d)
-            print("Normalized Array = ", normalized_array_1d)
-        
-        return normalized_array_1d
-
     def getArrays(self):
         x_a = list()
         y_a = list()
@@ -334,12 +318,12 @@ class PathDetector:
         is_visited_a = list()
 
         for point3d in self.__sorted_path:
-            x_a.append(point3d[0])
-            y_a.append(point3d[1])
-            z_a.append(point3d[2])
-            pitch_a.append(point3d[3])
-            roll_a.append(point3d[4])
-            yaw_a.append(point3d[5])
+            x_a.append(float(point3d[0]))
+            y_a.append(float(point3d[1]))
+            z_a.append(float(point3d[2]))
+            pitch_a.append(float(point3d[3]))
+            roll_a.append(float(point3d[4]))
+            yaw_a.append(float(point3d[5]))
             is_visited_a.append(point3d[6])
 
         # normalize x and y

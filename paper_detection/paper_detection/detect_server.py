@@ -13,11 +13,17 @@ from Colors import Colors
 from Point3D import Point3D
 from PathDetector import PathDetector
 
-# from threading import Thread
-# from djitellopy import Tello
+import matplotlib.pyplot as plt
 import time
 
-import matplotlib.pyplot as plt
+
+WEBCAM_TEST = False
+TEST = False
+TEST_TELLO = False
+
+if TEST_TELLO:
+    from threading import Thread
+    from djitellopy import Tello
 
 
 class DetectActionServer(Node):
@@ -56,12 +62,11 @@ class DetectActionServer(Node):
         self.__image_ros = self.detect_paper()
         self.__image = self.__br.imgmsg_to_cv2(self.__image_ros)
 
-        # ''' BEGIN TO DELETE '''
-        # self.__image = cv2.imread("src/path_04.png")
-        # cv2.imshow('image to find path', self.__image)
-        # cv2.waitKey(1000)
-        # cv2.destroyAllWindows()
-        # ''' END TO DELETE '''
+        if TEST:
+            self.__image = cv2.imread("src/path_04.png")
+            cv2.imshow('image to find path', self.__image)
+            cv2.waitKey(1000)
+            cv2.destroyAllWindows()
 
         self.__path_detector = PathDetector(self.__image)
         self.__path_detector.preparePath()
@@ -129,42 +134,48 @@ class DetectActionServer(Node):
         
 
     def detect_paper(self):
-        # self.__tello.connect()
-        # self.__tello.streamon()
-        # frame_read = self.__tello.get_frame_read()     
-          
-        # ''' BEGIN TO DELETE '''
-        # cv2.namedWindow("Trackbars")
-        # cv2.createTrackbar("Min Threshold", "Trackbars", 17, 250, lambda x: None)
-        # cv2.createTrackbar("Max Threshold", "Trackbars", 70, 250, lambda x: None)
-        # ''' END TO DELETE '''
+        if TEST_TELLO:
+            self.__tello.connect()
+            self.__tello.streamon()
+            frame_read = self.__tello.get_frame_read()     
         
-        # Load the webcam
-        # cap = cv2.VideoCapture('src/paper_detection/paper_detection/video_2.avi')
+        if TEST:
+            cv2.namedWindow("Trackbars")
+            cv2.createTrackbar("Min Threshold", "Trackbars", 17, 250, lambda x: None)
+            cv2.createTrackbar("Max Threshold", "Trackbars", 70, 250, lambda x: None)
+        
+        if WEBCAM_TEST:
+            # Load the webcam
+            cap = cv2.VideoCapture('src/paper_detection/paper_detection/video_2.avi')
+            
         previous_contour = None
-
-
 
         # start timer
         start = time.time()
 
         while True:
-
-            # Read the webcam
-            # _, img = cap.read()
+            if WEBCAM_TEST:
+                # Read the webcam
+                _, img = cap.read()
+            
             if self.image is None:
                 continue
             img = self.image
 
-            # min_threshold = cv2.getTrackbarPos("Min Threshold", "Trackbars")
-            # max_threshold = cv2.getTrackbarPos("Max Threshold", "Trackbars")
             min_threshold = 17
             max_threshold = 70
-            # img = self.__tello.get_frame_read().frame
-            # print(img.shape)
-            # img = cv2.imread("src/ARL_PROJ_GRUPA_IV/paper_detection/paper_detection/room_with_grid2.png")
-            # if img == None or len(img) == 0:
-            #     continue
+            
+            if TEST:
+                min_threshold = cv2.getTrackbarPos("Min Threshold", "Trackbars")
+                max_threshold = cv2.getTrackbarPos("Max Threshold", "Trackbars")
+
+            if TEST_TELLO:
+                img = self.__tello.get_frame_read().frame
+                print(img.shape)
+                img = cv2.imread("src/ARL_PROJ_GRUPA_IV/paper_detection/paper_detection/room_with_grid2.png")
+                if img == None or len(img) == 0:
+                    continue
+            
             # Convert to grayscale
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -214,9 +225,10 @@ class DetectActionServer(Node):
                     roi = img[y:y+h, x:x+w]
                     roi = self.perspective_transformation(img, warp_box)
                     # ''' BEGIN TO DELETE '''
-                    # cv2.imwrite('roi.png', roi)
-                    # cv2.imshow('image', roi)
-                    # cv2.waitKey(1000)
+                    cv2.imwrite('roi.png', roi)
+                    if TEST:
+                        cv2.imshow('image', roi)
+                    cv2.waitKey(1000)
                     # ''' END TO DELETE '''
                     self.__image_ros = self.__br.cv2_to_imgmsg(roi)
                     return self.__image_ros
@@ -224,18 +236,20 @@ class DetectActionServer(Node):
                 start = time.time()
                 # set previous contour to current contour
                 previous_contour = box
-            # ''' BEGIN TO DELETE '''
-            # cv2.imshow('frame', img)
-            # cv2.imshow('Trackbars', canny)
+            if TEST:
+                # ''' BEGIN TO DELETE '''
+                cv2.imshow('frame', img)
+                cv2.imshow('Trackbars', canny)
+                # ''' END TO DELETE '''
             cv2.waitKey(1)
-            # ''' END TO DELETE '''
             if previous_contour is None and biggest is not None:
                 previous_contour = box      
             time.sleep(0.1)
             rclpy.spin_once(self)
-            
-        # Release the webcam
-        # cap.release()
+        
+        if WEBCAM_TEST:
+            # Release the webcam
+            cap.release()
         
 
         # Close all windows
