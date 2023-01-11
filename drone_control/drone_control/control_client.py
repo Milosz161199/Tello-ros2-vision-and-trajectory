@@ -19,7 +19,7 @@ class ControlActionClient(Node):
     def __init__(self):
         super().__init__('control_action_client')
         # Control drone with service call or topic cmd_vel
-        # topic preffered
+        # topic - preferred
         self.control_with_srv = False
         # Operate in simulation or in laboratory
         self.operate_in_sim = True
@@ -188,7 +188,7 @@ class ControlActionClient(Node):
         print(len(self.x_arr))
         print(len(self.y_arr))
         print(len(self.z_arr))
-        time.sleep(3)
+        time.sleep(5)
         self.start_control = True
         
     def timer_callback(self):
