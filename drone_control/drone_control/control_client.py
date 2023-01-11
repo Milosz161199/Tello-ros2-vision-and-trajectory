@@ -18,10 +18,18 @@ class ControlActionClient(Node):
 
     def __init__(self):
         super().__init__('control_action_client')
+        # Control drone with service call or topic cmd_vel
+        # topic preffered
+        self.control_with_srv = False
+        # Operate in simulation or in laboratory
+        self.operate_in_sim = True
         
-        self.control_method = False
-        self.rc_srv_name = "/tello_action"
-        self.topic_cmd_name = "/cmd_vel"
+        if self.operate_in_sim:
+            self.rc_srv_name = "/drone1/tello_action"
+            self.topic_cmd_name = "/drone1/cmd_vel"
+        else:
+            self.rc_srv_name = "/tello_action"
+            self.topic_cmd_name = "/cmd_vel"
         
         self.vel_lin = 0.1
         self.vel_ang = 0.1
@@ -79,30 +87,37 @@ class ControlActionClient(Node):
         self.curr_point = 0
         self.start_control = False
         
+        # Create client for paper detect action
         self._action_client = ActionClient(
             self,
             Detect,
             'Detect')
         
-        # self._sub_optitrack = self.create_subscription(
-        #     String,
-        #     'optitrack_topic',
-        #     self.optitrack_callback,
-        #     10)
+        if self.operate_in_sim:
+            # Subscribe g2rr topic
+            self._sub_republisher = self.create_subscription(
+                Odometry,
+                '/repeater/tello_1/pose/info',
+                self.republisher_callback,
+                10)
+        else:
+            # Subscribe optitrack republisher topic
+            self._sub_optitrack = self.create_subscription(
+                String,
+                'optitrack_topic',
+                self.optitrack_callback,
+                10)
         
-        self._sub_republisher = self.create_subscription(
-            Odometry,
-            '/repeater/tello_1/pose/info',
-            self.republisher_callback,
-            10)
-        
+        # Create client for rc service
         self._client_rc = self.create_client(
             TelloAction,
             self.rc_srv_name)
         
+        # Wait for service to connect
         while not self._client_rc.wait_for_service(timeout_sec=2.0):
             self.get_logger().error("Rc service not available - waiting for service")
             
+        # Subscribe to tello response topic
         self.response_rc = self.create_subscription(
             TelloResponse,
             "tello_response",
@@ -111,15 +126,19 @@ class ControlActionClient(Node):
         
         self.get_logger().info("Control node has been started")
         
+        # Take off drone
         self._client_rc.call_async(TelloAction.Request(cmd="takeoff"))
 
         self.get_logger().info("Drone took off")
         
+        # Creat publisher for cmd_vel topic
         self._pub_cmd_vel = self.create_publisher(Twist, self.topic_cmd_name, 10)
         
+        # Timer for drone control loop
         self.timer_period = 1/10  # 10Hz
         self._timer = self.create_timer(self.timer_period, self.timer_callback)
         
+        # Timer for processing optitrack / g2rr data
         self.control_timer_period = 1 / 250  # 250Hz
         self._control_timer = self.create_timer(self.control_timer_period, self.control_timer_callback)
         
@@ -127,11 +146,13 @@ class ControlActionClient(Node):
         pass
     
     def optitrack_callback(self, msg):
+        # Update drone position
         self.curr_measured_x = msg.position.x
         self.curr_measured_y = msg.position.y
         self.curr_measured_z = msg.position.z
     
     def republisher_callback(self, msg):
+        # Update drone position
         self.curr_measured_x = msg.pose.pose.position.x
         self.curr_measured_y = msg.pose.pose.position.y
         self.curr_measured_z = msg.pose.pose.position.z
@@ -167,9 +188,7 @@ class ControlActionClient(Node):
         print(len(self.x_arr))
         print(len(self.y_arr))
         print(len(self.z_arr))
-        # self.get_logger().info('Result: f'.format(result.x))
-        # rclpy.shutdown()
-        time.sleep(5)
+        time.sleep(3)
         self.start_control = True
         
     def timer_callback(self):
@@ -195,8 +214,6 @@ class ControlActionClient(Node):
                 print('final point')
                 self.twist_cmd = Twist()
                 self.new_cmd = True
-                # time.sleep(2)
-                # rclpy.shutdown()
             
             if self.reached_x and self.reached_y and self.reached_z:
                 self.curr_point += 1
@@ -239,7 +256,7 @@ class ControlActionClient(Node):
             return False
         
     def send_drone_cmd(self):
-        if self.control_method == True:
+        if self.control_with_srv:
             multi = 10
             srv_req = TelloAction.Request()
             srv_req.cmd = f"rc {int(self.twist_cmd.linear.x*multi)} {int(self.twist_cmd.linear.y*multi)} {int(self.twist_cmd.linear.z*multi)} {int(-1*self.twist_cmd.angular.z*30 )}"
