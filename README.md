@@ -1,6 +1,11 @@
 # ARL_PROJ_GRUPA_IV
 Odczytywanie i odtwarzanie przez dron trajektorii narysowanej na kartce
 
+## Potrzebne rzeczy do zainstalowania
+```
+pip3 install tqdm
+sudo apt-get install python3-tk
+```
 
 ## Pobieranie i tworzenie przestrzeni roboczej
 Środowisko zostało przygotowane w dockerze dla ros2 foxy.
