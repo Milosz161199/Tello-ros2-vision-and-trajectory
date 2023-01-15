@@ -3,7 +3,7 @@ Odczytywanie i odtwarzanie przez dron trajektorii narysowanej na kartce
 
 ## Potrzebne rzeczy do zainstalowania
 ```
-pip3 install tqdm
+pip3 install tqdm protobuf==3.20.0
 sudo apt-get install python3-tk
 ```
 
@@ -15,7 +15,7 @@ cd ~/tello_ros_ws/src
 git clone https://github.com/Milosz161199/ARL_PROJ_GRUPA_IV.git
 cd ..
 source /opt/ros/foxy/setup.bash
-colcon build
+colcon build --symlink-install
 ```
 ### Paczka zawierająca symulację świata z dronem w gazebo
 Do uruchomienia symulacji konieczne będzie pobranie poniższej paczki.
@@ -26,7 +26,7 @@ cd ~/tello_ros_ws/src
 git clone https://github.com/TIERS/tello-ros2-gazebo.git
 cd ..
 source /opt/ros/foxy/setup.bash
-colcon build
+colcon build --symlink-install
 ```
 ### Podmienienie tekstur w arucotag'ach
 Należy przekopiować zdjęcie z folderu **src/path_models/** do katalogu **src/tello-ros2-gazebo/tello_ros/tello_gazebo/models/marker_0/materials/textures/**, 
@@ -51,6 +51,11 @@ python3 src/paper_detection/paper_detection/detect_server.py
 Klienta odpowiadającego za sterowanie dronem:
 ```
 python3 src/drone_control/drone_control/control_client.py
+```
+
+Uruchonienie republishera topic'ów z gazebo
+```
+ros2 run pkg_g2rr g2rr tello_1
 ```
 
 Żądanie akcji:
