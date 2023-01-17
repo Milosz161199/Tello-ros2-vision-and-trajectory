@@ -29,9 +29,18 @@ if TEST_TELLO:
 class DetectActionServer(Node):
     def __init__(self):
         super().__init__('detect_action_server')
+        
+        self.__simulation = True
+        self.__image_topic = str()
+        
+        if self.__simulation:
+            self.__image_topic = 'drone1/image_raw'
+        else:
+            self.__image_topic = '/image_raw'
+        
         self.subscription = self.create_subscription(
             Image,
-            'drone1/image_raw',
+            self.__image_topic,
             self.listener_callback,
             10) 
         self.subscription  # prevent unused variable warning
@@ -42,7 +51,6 @@ class DetectActionServer(Node):
             'Detect',
             self.execute_callback)
 
-        # self.__tello = Tello()
         self.image = None
 
         self.__path_detector = None
@@ -51,13 +59,13 @@ class DetectActionServer(Node):
         self.__br = CvBridge()
         self.__result = None
         
+        
     def listener_callback(self, msg):
         self.image = self.__br.imgmsg_to_cv2(msg)
 
+
     def execute_callback(self, goal_handle):
         self.get_logger().info('Executing goal...')
-
-        sequence = [0, 1]
 
         self.__image_ros = self.detect_paper()
         self.__image = self.__br.imgmsg_to_cv2(self.__image_ros)
@@ -153,13 +161,16 @@ class DetectActionServer(Node):
         start = time.time()
 
         while True:
+            print('Looking for image...',  end='\r')
+            
+            # Read the webcam
             if WEBCAM_TEST:
-                # Read the webcam
                 _, img = cap.read()
             
             if self.image is None:
                 continue
-            img = self.image
+            else:
+                img = self.image
 
             min_threshold = 17
             max_threshold = 70
@@ -211,7 +222,7 @@ class DetectActionServer(Node):
 
             # calculate elapsed time
             elapsed = time.time() - start
-
+            print(f'Time to be sure about image: {round(elapsed, 2)}s/4.0s',  end='\r')
             # if elapsed time is greater than 1 second
             if elapsed > 4 and previous_contour is not None:
                 # calculate the difference between the current contour and the previous contour
@@ -223,12 +234,11 @@ class DetectActionServer(Node):
                     x, y, w, h = cv2.boundingRect(box)
                     roi = img[y:y+h, x:x+w]
                     roi = self.perspective_transformation(img, warp_box)
-                    # ''' BEGIN TO DELETE '''
+                    # Write image
                     cv2.imwrite('roi.png', roi)
                     if TEST:
                         cv2.imshow('image', roi)
                     cv2.waitKey(1000)
-                    # ''' END TO DELETE '''
                     self.__image_ros = self.__br.cv2_to_imgmsg(roi)
                     return self.__image_ros
                  
@@ -250,7 +260,6 @@ class DetectActionServer(Node):
             # Release the webcam
             cap.release()
         
-
         # Close all windows
         cv2.destroyAllWindows()
         

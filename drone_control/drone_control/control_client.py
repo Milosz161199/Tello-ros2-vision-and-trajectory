@@ -186,9 +186,9 @@ class ControlActionClient(Node):
         self.x_arr = result.x
         self.y_arr = result.y
         self.z_arr = result.z
-        print(len(self.x_arr))
-        print(len(self.y_arr))
-        print(len(self.z_arr))
+        # print(len(self.x_arr))
+        # print(len(self.y_arr))
+        # print(len(self.z_arr))
         time.sleep(5)
         self.start_control = True
         
@@ -206,13 +206,13 @@ class ControlActionClient(Node):
             self.reached_y = False
             self.reached_z = False
             if self.curr_point < self.number_of_points - 1:
-                print('point:', self.curr_point, '/', self.number_of_points)
+                print('Point:', self.curr_point, '/', self.number_of_points, end='\r')
                 self.new_cmd = True
                 self.reached_x = self.set_x_velocity(self.x_arr[self.curr_point])
                 self.reached_y = self.set_y_velocity(self.y_arr[self.curr_point])
                 self.reached_z = self.set_z_velocity(self.z_arr[self.curr_point])
             else:
-                print('final point')
+                print('Final point reached!',  end='\r')
                 self.twist_cmd = Twist()
                 self.new_cmd = True
             

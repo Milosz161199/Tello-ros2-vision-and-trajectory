@@ -1,9 +1,8 @@
 import cv2
 import numpy as np
 
-from Point3D import *
-
 from tqdm import tqdm
+from Point3D import *
 
 DEBUG_MODE = False
 

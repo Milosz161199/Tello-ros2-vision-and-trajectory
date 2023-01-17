@@ -87,176 +87,6 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
-    <model name='tello_1'>
-      <link name='base_link_1'>
-        <inertial>
-          <pose>3e-06 0 0 0 -0 0</pose>
-          <mass>0.10001</mass>
-          <inertia>
-            <ixx>0.000291833</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>0.000541012</iyy>
-            <iyz>0</iyz>
-            <izz>0.000291845</izz>
-          </inertia>
-        </inertial>
-        <collision name='base_link_1_fixed_joint_lump__collision_collision'>
-          <pose>0 0 0 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>0.18 0.18 0.05</size>
-            </box>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <collision name='base_link_1_fixed_joint_lump__camera_link_1_collision_1'>
-          <pose>0.035 0 0 0 -0 0</pose>
-          <geometry>
-            <sphere>
-              <radius>0.01</radius>
-            </sphere>
-          </geometry>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <friction>
-              <ode/>
-              <torsional>
-                <ode/>
-              </torsional>
-            </friction>
-            <bounce/>
-          </surface>
-          <max_contacts>10</max_contacts>
-        </collision>
-        <visual name='base_link_1_visual'>
-          <pose>0 0 0.01 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>0.07 0.02 0.02</size>
-            </box>
-          </geometry>
-        </visual>
-        <visual name='base_link_1_visual_1'>
-          <pose>0 0 -0.01 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>0.07 0.02 0.02</size>
-            </box>
-          </geometry>
-        </visual>
-        <visual name='base_link_1_visual_2'>
-          <pose>0.05 -0.05 0 0 -0 0</pose>
-          <geometry>
-            <cylinder>
-              <length>0.01</length>
-              <radius>0.045</radius>
-            </cylinder>
-          </geometry>
-        </visual>
-        <visual name='base_link_1_visual_3'>
-          <pose>-0.05 0.05 0 0 -0 0</pose>
-          <geometry>
-            <cylinder>
-              <length>0.01</length>
-              <radius>0.045</radius>
-            </cylinder>
-          </geometry>
-        </visual>
-        <visual name='base_link_1_visual_4'>
-          <pose>-0.05 -0.05 0 0 -0 0</pose>
-          <geometry>
-            <cylinder>
-              <length>0.01</length>
-              <radius>0.045</radius>
-            </cylinder>
-          </geometry>
-        </visual>
-        <visual name='base_link_1_visual_5'>
-          <pose>0.05 0.05 0 0 -0 0</pose>
-          <geometry>
-            <cylinder>
-              <length>0.01</length>
-              <radius>0.045</radius>
-            </cylinder>
-          </geometry>
-        </visual>
-        <visual name='base_link_1_fixed_joint_lump__camera_link_1_visual_6'>
-          <pose>0.035 0 0 0 -0 0</pose>
-          <geometry>
-            <sphere>
-              <radius>0.01</radius>
-            </sphere>
-          </geometry>
-        </visual>
-        <sensor name='drone1' type='camera'>
-          <update_rate>30</update_rate>
-          <camera name='head'>
-            <horizontal_fov>0.96</horizontal_fov>
-            <image>
-              <width>960</width>
-              <height>720</height>
-              <format>R8G8B8</format>
-            </image>
-            <clip>
-              <near>0.1</near>
-              <far>300</far>
-            </clip>
-            <noise>
-              <type>gaussian</type>
-              <mean>0</mean>
-              <stddev>0.007</stddev>
-            </noise>
-          </camera>
-          <plugin name='camera_controller_1' filename='libgazebo_ros_camera.so'>
-            <alwaysOn>1</alwaysOn>
-            <updateRate>0.0</updateRate>
-            <cameraName>this_is_ignored</cameraName>
-            <imageTopicName>image_raw</imageTopicName>
-            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-            <frameName>camera_link_1</frameName>
-            <hackBaseline>0.07</hackBaseline>
-            <distortionK1>0.0</distortionK1>
-            <distortionK2>0.0</distortionK2>
-            <distortionK3>0.0</distortionK3>
-            <distortionT1>0.0</distortionT1>
-            <distortionT2>0.0</distortionT2>
-          </plugin>
-          <pose>0.035 0 0 0 -0 0</pose>
-        </sensor>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <plugin name='TelloPlugin' filename='libTelloPlugin.so'>
-        <namespace>drone1</namespace>
-        <parameter name='use_sim_time' type='bool'>1</parameter>
-        <link_name>base_link_1</link_name>
-        <center_of_mass>0 0 0</center_of_mass>
-      </plugin>
-      <static>0</static>
-      <plugin name='ground_truth' filename='libgazebo_ros_p3d.so'>
-        <frame_name>map</frame_name>
-        <body_name>base_link_1</body_name>
-        <topic_name>odom</topic_name>
-        <update_rate>30.0</update_rate>
-      </plugin>
-      <pose>0 0 1 0 -0 0</pose>
-    </model>
     <model name='marker_0'>
       <link name='marker'>
         <pose>0 0 0 0 -0 0</pose>
@@ -393,6 +223,11 @@
       </attenuation>
       <cast_shadows>0</cast_shadows>
       <direction>0 0 -1</direction>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
     </light>
     <light name='user_point_light_1' type='point'>
       <pose>1.07884 2.88556 1 0 -0 0</pose>
@@ -406,6 +241,11 @@
       </attenuation>
       <cast_shadows>0</cast_shadows>
       <direction>0 0 -1</direction>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
     </light>
     <light name='user_point_light_2' type='point'>
       <pose>1.00577 -0.149182 1 0 -0 0</pose>
@@ -419,6 +259,11 @@
       </attenuation>
       <cast_shadows>0</cast_shadows>
       <direction>0 0 -1</direction>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
     </light>
     <model name='marker_1'>
       <link name='marker'>
@@ -545,10 +390,10 @@
       <pose>0.61813 -0.792263 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>6529 154000000</sim_time>
-      <real_time>6657 309235671</real_time>
-      <wall_time>1673262097 793088451</wall_time>
-      <iterations>6529154</iterations>
+      <sim_time>6636 790000000</sim_time>
+      <real_time>108 611299561</real_time>
+      <wall_time>1673782819 257045300</wall_time>
+      <iterations>107636</iterations>
       <model name='ground_plane'>
         <pose>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -560,45 +405,51 @@
         </link>
       </model>
       <model name='marker_0'>
-        <pose>0.566451 0.016016 0.1216 -1.57046 -0 1.63297</pose>
+        <pose>0.624991 -0.922238 0.508708 -1.57046 -0 1.63297</pose>
         <scale>1 1 1</scale>
         <link name='marker'>
-          <pose>0.566451 0.016016 0.1216 -1.57046 -0 1.63297</pose>
+          <pose>0.624991 -0.922238 0.508708 -1.57046 -0 1.63297</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='marker_pad'>
-          <pose>0.567449 0.016078 0.121599 -1.57046 -0 1.63297</pose>
+          <pose>0.625989 -0.922176 0.508707 -1.57046 -0 1.63297</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
       <model name='marker_1'>
-        <pose>0.614981 -0.568566 0.111006 -1.56774 -0 1.58639</pose>
+        <pose>0.616188 -0.568547 0.506045 -1.56774 -0 1.58639</pose>
         <scale>1 1 1</scale>
         <link name='marker'>
-          <pose>0.614981 -0.568566 0.111006 -1.56774 -0 1.58639</pose>
+          <pose>0.616188 -0.568547 0.506045 -1.56774 -0 1.58639</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='marker_pad'>
-          <pose>0.61598 -0.56855 0.111003 -1.56774 -0 1.58639</pose>
+          <pose>0.617187 -0.568531 0.506042 -1.56774 -0 1.58639</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='tello_1'>
-        <pose>0.000114 -1.5e-05 0.02499 0.000113 -0 -1.1e-05</pose>
+      <model name='marker_3'>
+        <pose>0.602452 -0.181667 0.515216 0 -1.56913 0</pose>
         <scale>1 1 1</scale>
-        <link name='base_link_1'>
-          <pose>0.000114 -1.5e-05 0.02499 0.000113 -0 -1.1e-05</pose>
-          <velocity>0 -0.003614 -0.003004 0.144487 0 2e-06</velocity>
-          <acceleration>2e-06 -7.90694 2.64922 2.02501 -0.004476 0.003059</acceleration>
-          <wrench>0 -0.790773 0.264949 0 -0 0</wrench>
+        <link name='marker'>
+          <pose>0.602452 -0.181667 0.515216 0 -1.56913 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='marker_pad'>
+          <pose>0.603452 -0.181667 0.515214 0 -1.56913 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
       <light name='sun'>
@@ -616,10 +467,134 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>-1.77005 -1.38065 0.709268 -0 0.299643 0.320195</pose>
+        <pose>-2.72106 -2.11539 2.27138 0 0.647643 0.352195</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
+    <model name='marker_3'>
+      <link name='marker'>
+        <pose>0 0 0 0 -0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <box>
+              <size>0.21 0.29 1e-05</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://marker_3/materials/scripts</uri>
+              <uri>model://marker_3/materials/textures</uri>
+              <name>ArucoVisualMarker3/Marker</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0 0 0 1</specular>
+            <emissive>1 1 1 0</emissive>
+            <shader type='vertex'>
+              <normal_map>__default__</normal_map>
+            </shader>
+          </material>
+          <pose>0 0 0 0 -0 0</pose>
+          <cast_shadows>1</cast_shadows>
+          <transparency>0</transparency>
+        </visual>
+        <collision name='collision'>
+          <laser_retro>0</laser_retro>
+          <max_contacts>10</max_contacts>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.21 0.29 1e-05</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='marker_pad'>
+        <pose relative_to='marker'>0 0 -0.001 0 -0 0</pose>
+        <visual name='visual'>
+          <geometry>
+            <box>
+              <size>0.21 0.29 1e-05</size>
+            </box>
+          </geometry>
+          <material>
+            <lighting>1</lighting>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/White</name>
+            </script>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+            <emissive>1 1 1 0</emissive>
+            <shader type='vertex'>
+              <normal_map>__default__</normal_map>
+            </shader>
+          </material>
+          <cast_shadows>1</cast_shadows>
+          <transparency>0</transparency>
+        </visual>
+        <collision name='collision'>
+          <laser_retro>0</laser_retro>
+          <max_contacts>10</max_contacts>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.21 0.29 1e-05</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='marker_JOINT_marker_pad' type='revolute'>
+        <parent>marker</parent>
+        <child>marker_pad</child>
+        <pose>0 0 0 0 -0 0</pose>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <upper>0</upper>
+            <lower>0</lower>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+      </joint>
+      <static>1</static>
+      <allow_auto_disable>1</allow_auto_disable>
+      <pose>0.110266 -0.612831 0 0 -0 0</pose>
+    </model>
   </world>
 </sdf>
