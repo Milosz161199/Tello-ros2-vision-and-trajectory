@@ -185,7 +185,6 @@ class PathDetector:
         
         for h in tqdm(range(int(self.__square_cy), int(height), int(self.__HOW_OFTEN * self.__square_cy))):
             for w in range(int(self.__square_cx), int(width), int(self.__HOW_OFTEN * self.__square_cx)):
-                # array_of_points_to_check.append([h, w])
                 point = [h, w]
                 color = self.__witchColor(point)
                 if str(color) == "[0, 0, 0]":
