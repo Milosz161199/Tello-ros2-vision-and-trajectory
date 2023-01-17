@@ -38,15 +38,15 @@ class ControlActionClient(Node):
         self.lin_offset = 0.1
         self.ang_offset = 0.1
         
-        self.curr_measured_x = 0
-        self.curr_measured_y = 0
-        self.curr_measured_z = 0
-        self.curr_x = 0
-        self.curr_y = 0
-        self.curr_z = 0
-        self.dest_x = 0
-        self.dest_y = 0
-        self.dest_z = 0
+        self.curr_measured_x = 0.0
+        self.curr_measured_y = 0.0
+        self.curr_measured_z = 0.0
+        self.curr_x = 0.0
+        self.curr_y = 0.0
+        self.curr_z = 0.0
+        self.dest_x = 0.0
+        self.dest_y = 0.0
+        self.dest_z = 0.0
         
         self.reached_x = False
         self.reached_y = False
@@ -55,16 +55,16 @@ class ControlActionClient(Node):
         self.new_cmd = False
         self.msg_twist = Twist()
         
-        self.current_time = 0
-        self.last_time = 0
+        self.current_time = 0.0
+        self.last_time = 0.0
         
         self.kp_x = 1.68
         self.ki_x = 0.86
         self.kd_x = 1.68
         self.kp_y = 3
         self.ki_y = 0.1
-        self.kd_y = 2
-        self.kp_z = 16
+        self.kd_y = 2.0
+        self.kp_z = 16.0
         self.ki_z = 2.02
         self.kd_z = 10.8
         
@@ -94,6 +94,7 @@ class ControlActionClient(Node):
             'Detect')
         
         if self.operate_in_sim:
+            self.get_logger().error("Create g2rr subscription")
             # Subscribe g2rr topic
             self._sub_republisher = self.create_subscription(
                 Odometry,
@@ -147,15 +148,15 @@ class ControlActionClient(Node):
     
     def optitrack_callback(self, msg):
         # Update drone position
-        self.curr_measured_x = msg.position.x
-        self.curr_measured_y = msg.position.y
-        self.curr_measured_z = msg.position.z
+        self.curr_measured_x = float(msg.position.x)
+        self.curr_measured_y = float(msg.position.y)
+        self.curr_measured_z = float(msg.position.z)
     
     def republisher_callback(self, msg):
         # Update drone position
-        self.curr_measured_x = msg.pose.pose.position.x
-        self.curr_measured_y = msg.pose.pose.position.y
-        self.curr_measured_z = msg.pose.pose.position.z
+        self.curr_measured_x = float(msg.pose.pose.position.x)
+        self.curr_measured_y = float(msg.pose.pose.position.y)
+        self.curr_measured_z = float(msg.pose.pose.position.z)
     
     def send_goal(self, order):
         goal_msg = Detect.Goal()
@@ -185,9 +186,9 @@ class ControlActionClient(Node):
         self.x_arr = result.x
         self.y_arr = result.y
         self.z_arr = result.z
-        # print(len(self.x_arr))
-        # print(len(self.y_arr))
-        # print(len(self.z_arr))
+        print(len(self.x_arr))
+        print(len(self.y_arr))
+        print(len(self.z_arr))
         time.sleep(5)
         self.start_control = True
         
@@ -205,13 +206,13 @@ class ControlActionClient(Node):
             self.reached_y = False
             self.reached_z = False
             if self.curr_point < self.number_of_points - 1:
-                print('Point:', self.curr_point, '/', self.number_of_points, end='\r')
+                print('point:', self.curr_point, '/', self.number_of_points)
                 self.new_cmd = True
                 self.reached_x = self.set_x_velocity(self.x_arr[self.curr_point])
                 self.reached_y = self.set_y_velocity(self.y_arr[self.curr_point])
                 self.reached_z = self.set_z_velocity(self.z_arr[self.curr_point])
             else:
-                print('Final point reached!',  end='\r')
+                print('final point')
                 self.twist_cmd = Twist()
                 self.new_cmd = True
             
@@ -220,44 +221,47 @@ class ControlActionClient(Node):
                 self.twist_cmd = Twist()
     
     def set_x_velocity(self, dest_x):
+        dest_x = float(dest_x)
         self.curr_x = self.curr_measured_x
-        if (dest_x - self.lin_offset) < self.curr_x < (dest_x + self.lin_offset):
+        if (self.curr_x - self.lin_offset) < dest_x < (self.curr_x + self.lin_offset):
             self.twist_cmd.linear.x = 0.0
             return True
-        elif (dest_x - self.lin_offset) > self.curr_x:
-            self.twist_cmd.linear.x = self.vel_lin
-            return False
-        elif (dest_x + self.lin_offset) < self.curr_x:
+        elif (self.curr_x - self.lin_offset) > dest_x:
             self.twist_cmd.linear.x = -self.vel_lin
+            return False
+        elif (self.curr_x + self.lin_offset) < dest_x:
+            self.twist_cmd.linear.x = self.vel_lin
             return False
             
     def set_y_velocity(self, dest_y):
+        dest_y = float(dest_y)
         self.curr_y = self.curr_measured_y
-        if self.curr_y - self.lin_offset < dest_y < self.curr_y + self.lin_offset:
+        if (self.curr_y - self.lin_offset) < dest_y < (self.curr_y + self.lin_offset):
             self.twist_cmd.linear.y = 0.0
             return True
-        elif self.curr_y - self.lin_offset > dest_y:
+        elif (self.curr_y - self.lin_offset) > dest_y:
             self.twist_cmd.linear.y = -self.vel_lin
             return False
-        elif self.curr_y + self.lin_offset < dest_y:
+        elif (self.curr_y + self.lin_offset) < dest_y:
             self.twist_cmd.linear.y = self.vel_lin
             return False
             
     def set_z_velocity(self, dest_z):
+        dest_z = float(dest_z)
         self.curr_z = self.curr_measured_z
-        if self.curr_z - self.lin_offset < dest_z < self.curr_z + self.lin_offset:
+        if (self.curr_z - self.lin_offset) < dest_z < (self.curr_z + self.lin_offset):
             self.twist_cmd.linear.z = 0.0
             return True
-        elif self.curr_z - self.lin_offset > dest_z:
+        elif (self.curr_z - self.lin_offset) > dest_z:
             self.twist_cmd.linear.z = -self.vel_lin
             return False
-        elif self.curr_z + self.lin_offset < dest_z:
+        elif (self.curr_z + self.lin_offset) < dest_z:
             self.twist_cmd.linear.z = self.vel_lin
             return False
         
     def send_drone_cmd(self):
         if self.control_with_srv:
-            multi = 10
+            multi = 10.0
             srv_req = TelloAction.Request()
             srv_req.cmd = f"rc {int(self.twist_cmd.linear.x*multi)} {int(self.twist_cmd.linear.y*multi)} {int(self.twist_cmd.linear.z*multi)} {int(-1*self.twist_cmd.angular.z*30 )}"
             self._client_rc.call_async(srv_req)

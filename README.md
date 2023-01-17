@@ -17,11 +17,21 @@ cd ..
 source /opt/ros/foxy/setup.bash
 colcon build --symlink-install
 ```
+
+### Republisher Optitrack Link do repozytorium: [Kwach00/UDP_to_ROS2_OptiTrack_republisher](https://github.com/Kwach00/UDP_to_ROS2_OptiTrack_republisher/tree/main/udp_republisher)
+```
+cd ~/tello_ros_ws/src
+https://github.com/Kwach00/UDP_to_ROS2_OptiTrack_republisher/tree/main/udp_republisher
+cd ..
+source /opt/ros/foxy/setup.bash
+colcon build --symlink-install
+```
+
+
 ### Paczka zawierająca symulację świata z dronem w gazebo
 Do uruchomienia symulacji konieczne będzie pobranie poniższej paczki.
 Link do repozytorium: [TIERS/tello-ros2-gazebo](https://github.com/TIERS/tello-ros2-gazebo.git)
 ```
-mkdir -p ~/tello_ros_ws/src
 cd ~/tello_ros_ws/src
 git clone https://github.com/TIERS/tello-ros2-gazebo.git
 cd ..
@@ -56,6 +66,11 @@ python3 src/drone_control/drone_control/control_client.py
 Uruchonienie republishera topic'ów z gazebo
 ```
 ros2 run pkg_g2rr g2rr tello_1
+```
+
+Republisher Optitrack 
+```
+ros2 run udp_republisher udp_republisher
 ```
 
 Żądanie akcji:
