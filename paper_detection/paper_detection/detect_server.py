@@ -105,8 +105,6 @@ class DetectActionServer(Node):
         self.__result.roll = list(roll_a)
         self.__result.yaw = list(yaw_a)
         self.__result.is_visited = list(is_visited_a)
-
-        print(self.__result.x)
         
         # ''' BEGIN TO DELETE '''
         plt.scatter(list(x_a), list(y_a), s=1)
