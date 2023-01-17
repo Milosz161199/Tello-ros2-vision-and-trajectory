@@ -249,13 +249,13 @@ class ControlActionClient(Node):
     def set_z_velocity(self, dest_z):
         dest_z = float(dest_z)
         self.curr_z = self.curr_measured_z
-        if self.curr_z - self.lin_offset < dest_z < self.curr_z + self.lin_offset:
+        if (self.curr_z - self.lin_offset) < dest_z < (self.curr_z + self.lin_offset):
             self.twist_cmd.linear.z = 0.0
             return True
-        elif self.curr_z - self.lin_offset > dest_z:
+        elif (self.curr_z - self.lin_offset) > dest_z:
             self.twist_cmd.linear.z = -self.vel_lin
             return False
-        elif self.curr_z + self.lin_offset < dest_z:
+        elif (self.curr_z + self.lin_offset) < dest_z:
             self.twist_cmd.linear.z = self.vel_lin
             return False
         
