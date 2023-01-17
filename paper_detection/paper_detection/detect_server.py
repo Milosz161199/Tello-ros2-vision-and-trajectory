@@ -30,7 +30,7 @@ class DetectActionServer(Node):
     def __init__(self):
         super().__init__('detect_action_server')
         
-        self.__simulation = True
+        self.__simulation = False
         self.__image_topic = str()
         
         if self.__simulation:
@@ -106,6 +106,8 @@ class DetectActionServer(Node):
         self.__result.yaw = list(yaw_a)
         self.__result.is_visited = list(is_visited_a)
 
+        print(self.__result.x)
+        
         # ''' BEGIN TO DELETE '''
         plt.scatter(list(x_a), list(y_a), s=1)
         plt.plot(list(x_a), list(y_a))
