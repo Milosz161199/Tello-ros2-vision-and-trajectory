@@ -94,7 +94,7 @@ class ControlActionClient(Node):
             'Detect')
         
         if self.operate_in_sim:
-            self.get_logger().error("Create g2rr subscription")
+            self.get_logger().info("Create g2rr subscription")
             # Subscribe g2rr topic
             self._sub_republisher = self.create_subscription(
                 Odometry,
@@ -143,7 +143,7 @@ class ControlActionClient(Node):
         self.control_timer_period = 1 / 250  # 250Hz
         self._control_timer = self.create_timer(self.control_timer_period, self.control_timer_callback)
         
-    def response_callback(self):
+    def response_callback(self, message):
         pass
     
     def optitrack_callback(self, msg):
@@ -207,11 +207,11 @@ class ControlActionClient(Node):
             self.reached_z = False
             if self.curr_point < self.number_of_points - 1:
                 # print('point:', self.curr_point, '/', self.number_of_points)
-                print(f'Point: {self.curr_point}/{self.number_of_points}',  end='\r')
+                print(f'Point: {self.curr_point}/{self.number_of_points}', end='\r')
                 self.new_cmd = True
-                self.reached_x = self.set_x_velocity(self.x_arr[self.curr_point])
-                self.reached_y = self.set_y_velocity(self.y_arr[self.curr_point])
-                self.reached_z = self.set_z_velocity(self.z_arr[self.curr_point])
+                self.reached_x = self.set_x_velocity(float(self.x_arr[self.curr_point]))
+                self.reached_y = self.set_y_velocity(float(self.y_arr[self.curr_point]))
+                self.reached_z = self.set_z_velocity(float(self.z_arr[self.curr_point]))
             else:
                 # print('final point')
                 print('Final point', end='\r')
@@ -265,7 +265,7 @@ class ControlActionClient(Node):
         if self.control_with_srv:
             multi = 10.0
             srv_req = TelloAction.Request()
-            srv_req.cmd = f"rc {int(self.twist_cmd.linear.x*multi)} {int(self.twist_cmd.linear.y*multi)} {int(self.twist_cmd.linear.z*multi)} {int(-1*self.twist_cmd.angular.z*30 )}"
+            srv_req.cmd = f"rc {int(self.twist_cmd.linear.y*multi)} {int(self.twist_cmd.linear.x*multi)} {int(self.twist_cmd.linear.z*multi)} {int(-1*self.twist_cmd.angular.z*30 )}"
             self._client_rc.call_async(srv_req)
             self.get_logger().info(f"{srv_req.cmd}")
         else:
