@@ -1,0 +1,24 @@
+[0.392s] Invoking command in '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo': PYTHONPATH=/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/prefix_override:/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/build --no-deps install_data
+[0.517s] running develop
+[0.573s] running egg_info
+[0.573s] creating drone_control_demo.egg-info
+[0.573s] writing drone_control_demo.egg-info/PKG-INFO
+[0.573s] writing dependency_links to drone_control_demo.egg-info/dependency_links.txt
+[0.574s] writing entry points to drone_control_demo.egg-info/entry_points.txt
+[0.574s] writing requirements to drone_control_demo.egg-info/requires.txt
+[0.574s] writing top-level names to drone_control_demo.egg-info/top_level.txt
+[0.583s] writing manifest file 'drone_control_demo.egg-info/SOURCES.txt'
+[0.602s] reading manifest file 'drone_control_demo.egg-info/SOURCES.txt'
+[0.603s] writing manifest file 'drone_control_demo.egg-info/SOURCES.txt'
+[0.624s] running build_ext
+[0.624s] Creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/python3.8/site-packages/site.py
+[0.625s] Creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/python3.8/site-packages/drone-control-demo.egg-link (link to .)
+[0.626s] 
+[0.626s] Installed /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo
+[0.626s] running install_data
+[0.626s] creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/ament_index
+[0.626s] creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/ament_index/resource_index
+[0.626s] creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/ament_index/resource_index/packages
+[0.626s] copying resource/drone_control_demo -> /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/ament_index/resource_index/packages
+[0.627s] copying package.xml -> /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo
+[0.645s] Invoked command in '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo' returned '0': PYTHONPATH=/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/prefix_override:/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/build --no-deps install_data

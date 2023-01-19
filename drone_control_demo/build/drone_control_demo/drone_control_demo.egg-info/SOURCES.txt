@@ -1,0 +1,13 @@
+package.xml
+setup.cfg
+setup.py
+drone_control_demo/__init__.py
+drone_control_demo/control_client.py
+drone_control_demo.egg-info/PKG-INFO
+drone_control_demo.egg-info/SOURCES.txt
+drone_control_demo.egg-info/dependency_links.txt
+drone_control_demo.egg-info/entry_points.txt
+drone_control_demo.egg-info/requires.txt
+drone_control_demo.egg-info/top_level.txt
+drone_control_demo.egg-info/zip-safe
+resource/drone_control_demo

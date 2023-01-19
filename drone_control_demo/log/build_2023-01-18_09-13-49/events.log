@@ -1,0 +1,35 @@
+[0.000000] (-) TimerEvent: {}
+[0.000098] (drone_control_demo) JobQueued: {'identifier': 'drone_control_demo', 'dependencies': OrderedDict()}
+[0.000119] (drone_control_demo) JobStarted: {'identifier': 'drone_control_demo'}
+[0.099566] (-) TimerEvent: {}
+[0.199973] (-) TimerEvent: {}
+[0.300599] (-) TimerEvent: {}
+[0.391852] (drone_control_demo) Command: {'cmd': ['/usr/bin/python3', 'setup.py', 'develop', '--editable', '--build-directory', '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/build', '--no-deps', 'install_data'], 'cwd': '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo', 'env': {'HOSTNAME': 'milosz-Nitro-AN515-58', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib', 'HOME': '/root', 'OLDPWD': '/home/tello_ws/src/ARL_PROJ_GRUPA_IV', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'foxy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'ROS_LOCALHOST_ONLY': '0', 'QT_X11_NO_MITSHM': '1', 'PATH': '/opt/ros/foxy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': ':0', 'LANG': 'C.UTF-8', 'XAUTHORITY': '/tmp/.docker.xauth', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/opt/ros/foxy', 'PWD': '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/prefix_override:/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/python3.8/site-packages:/opt/ros/foxy/lib/python3.8/site-packages', 'COLCON': '1'}, 'shell': False}
+[0.400737] (-) TimerEvent: {}
+[0.500983] (-) TimerEvent: {}
+[0.517285] (drone_control_demo) StdoutLine: {'line': b'running develop\n'}
+[0.572961] (drone_control_demo) StdoutLine: {'line': b'running egg_info\n'}
+[0.573187] (drone_control_demo) StdoutLine: {'line': b'creating drone_control_demo.egg-info\n'}
+[0.573318] (drone_control_demo) StdoutLine: {'line': b'writing drone_control_demo.egg-info/PKG-INFO\n'}
+[0.573513] (drone_control_demo) StdoutLine: {'line': b'writing dependency_links to drone_control_demo.egg-info/dependency_links.txt\n'}
+[0.573598] (drone_control_demo) StdoutLine: {'line': b'writing entry points to drone_control_demo.egg-info/entry_points.txt\n'}
+[0.573675] (drone_control_demo) StdoutLine: {'line': b'writing requirements to drone_control_demo.egg-info/requires.txt\n'}
+[0.573748] (drone_control_demo) StdoutLine: {'line': b'writing top-level names to drone_control_demo.egg-info/top_level.txt\n'}
+[0.582973] (drone_control_demo) StdoutLine: {'line': b"writing manifest file 'drone_control_demo.egg-info/SOURCES.txt'\n"}
+[0.601059] (-) TimerEvent: {}
+[0.602426] (drone_control_demo) StdoutLine: {'line': b"reading manifest file 'drone_control_demo.egg-info/SOURCES.txt'\n"}
+[0.602744] (drone_control_demo) StdoutLine: {'line': b"writing manifest file 'drone_control_demo.egg-info/SOURCES.txt'\n"}
+[0.623796] (drone_control_demo) StdoutLine: {'line': b'running build_ext\n'}
+[0.624127] (drone_control_demo) StdoutLine: {'line': b'Creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/python3.8/site-packages/site.py\n'}
+[0.625496] (drone_control_demo) StdoutLine: {'line': b'Creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/python3.8/site-packages/drone-control-demo.egg-link (link to .)\n'}
+[0.626023] (drone_control_demo) StdoutLine: {'line': b'\n'}
+[0.626151] (drone_control_demo) StdoutLine: {'line': b'Installed /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo\n'}
+[0.626249] (drone_control_demo) StdoutLine: {'line': b'running install_data\n'}
+[0.626324] (drone_control_demo) StdoutLine: {'line': b'creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/ament_index\n'}
+[0.626398] (drone_control_demo) StdoutLine: {'line': b'creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/ament_index/resource_index\n'}
+[0.626469] (drone_control_demo) StdoutLine: {'line': b'creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/ament_index/resource_index/packages\n'}
+[0.626541] (drone_control_demo) StdoutLine: {'line': b'copying resource/drone_control_demo -> /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/ament_index/resource_index/packages\n'}
+[0.626613] (drone_control_demo) StdoutLine: {'line': b'copying package.xml -> /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo\n'}
+[0.643315] (drone_control_demo) CommandEnded: {'returncode': 0}
+[0.657610] (drone_control_demo) JobEnded: {'identifier': 'drone_control_demo', 'rc': 0}
+[0.658172] (-) EventReactorShutdown: {}

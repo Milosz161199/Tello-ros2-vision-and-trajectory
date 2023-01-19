@@ -1,0 +1,22 @@
+running develop
+running egg_info
+creating drone_control_demo.egg-info
+writing drone_control_demo.egg-info/PKG-INFO
+writing dependency_links to drone_control_demo.egg-info/dependency_links.txt
+writing entry points to drone_control_demo.egg-info/entry_points.txt
+writing requirements to drone_control_demo.egg-info/requires.txt
+writing top-level names to drone_control_demo.egg-info/top_level.txt
+writing manifest file 'drone_control_demo.egg-info/SOURCES.txt'
+reading manifest file 'drone_control_demo.egg-info/SOURCES.txt'
+writing manifest file 'drone_control_demo.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/python3.8/site-packages/site.py
+Creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/python3.8/site-packages/drone-control-demo.egg-link (link to .)
+
+Installed /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo
+running install_data
+creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/ament_index
+creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/ament_index/resource_index
+creating /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/ament_index/resource_index/packages
+copying resource/drone_control_demo -> /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/ament_index/resource_index/packages
+copying package.xml -> /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo

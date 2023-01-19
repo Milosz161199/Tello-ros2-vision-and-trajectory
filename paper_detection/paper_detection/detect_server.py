@@ -30,7 +30,7 @@ class DetectActionServer(Node):
     def __init__(self):
         super().__init__('detect_action_server')
         
-        self.__simulation = True
+        self.__simulation = False
         self.__image_topic = str()
         
         if self.__simulation:

@@ -270,69 +270,23 @@ class ControlActionClient(Node):
 
             if self.stop_control:
                 self.twist_cmd = Twist()  
-                self.new_cmd = False  
-                
-                
-    # def control_timer_callback(self):
-    #     if self.start_control:
-    #         self.reached_x = False
-    #         self.reached_y = False
-    #         self.reached_z = False
-    #         if self.curr_point < self.number_of_points - 1:
-    #             # print('point:', self.curr_point, '/', self.number_of_points)
-    #             print(f'Point: {self.curr_point}/{self.number_of_points}', end='\r')
-    #             print(float(self.x_arr[self.curr_point]))
-    #             self.new_cmd = True
-    #             self.reached_x = self.set_x_velocity(float(self.x_arr[self.curr_point]))
-    #             self.reached_y = self.set_y_velocity(float(self.y_arr[self.curr_point]))
-    #             self.reached_z = self.set_z_velocity(float(self.z_arr[self.curr_point]))
-    #         else:
-    #             # print('final point')
-    #             print('Final point', end='\r')
-    #             self.twist_cmd = Twist()
-    #             self.new_cmd = True
-            
-    #         if self.reached_x and self.reached_y and self.reached_z:
-    #             self.curr_point += 1
-    #             self.twist_cmd = Twist()
+                self.new_cmd = False     
     
     def set_x_velocity(self, dest_x):
+        print(f'Current opti: {self.curr_measured_x}, det: {dest_x}')
         dest_x = float(dest_x)
         self.curr_x = self.curr_measured_x
-        if (self.curr_x - self.lin_offset) < dest_x < (self.curr_x + self.lin_offset):
+        if ((self.curr_x - self.lin_offset) < dest_x) and (dest_x < (self.curr_x + self.lin_offset)):
             self.twist_cmd.linear.x = 0.0
+            print(f'VEL; {self.twist_cmd.linear.x}')
             return True
         elif (self.curr_x - self.lin_offset) > dest_x:
             self.twist_cmd.linear.x = -self.vel_lin
+            print(f'VEL; {self.twist_cmd.linear.x}')
             return False
         elif (self.curr_x + self.lin_offset) < dest_x:
             self.twist_cmd.linear.x = self.vel_lin
-            return False
-            
-    def set_y_velocity(self, dest_y):
-        dest_y = float(dest_y)
-        self.curr_y = self.curr_measured_y
-        if (self.curr_y - self.lin_offset) < dest_y < (self.curr_y + self.lin_offset):
-            self.twist_cmd.linear.y = 0.0
-            return True
-        elif (self.curr_y - self.lin_offset) > dest_y:
-            self.twist_cmd.linear.y = -self.vel_lin
-            return False
-        elif (self.curr_y + self.lin_offset) < dest_y:
-            self.twist_cmd.linear.y = self.vel_lin
-            return False
-            
-    def set_z_velocity(self, dest_z):
-        dest_z = float(dest_z)
-        self.curr_z = self.curr_measured_z
-        if (self.curr_z - self.lin_offset) < dest_z < (self.curr_z + self.lin_offset):
-            self.twist_cmd.linear.z = 0.0
-            return True
-        elif (self.curr_z - self.lin_offset) > dest_z:
-            self.twist_cmd.linear.z = -self.vel_lin
-            return False
-        elif (self.curr_z + self.lin_offset) < dest_z:
-            self.twist_cmd.linear.z = self.vel_lin
+            print(f'VEL; {self.twist_cmd.linear.x}')
             return False
         
     def send_drone_cmd(self):
@@ -358,6 +312,7 @@ class ControlActionClient(Node):
         self.msg_twist.linear.x = x_pid
         
         self._drone_cmd_publisher.publish(self.msg_twist)
+        
 
 def main(args=None):
     rclpy.init(args=args)

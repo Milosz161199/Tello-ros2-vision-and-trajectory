@@ -1,0 +1,95 @@
+[0.112s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--symlink-install']
+[0.112s] DEBUG:colcon:Parsed command line arguments: Namespace(ament_cmake_args=None, base_paths=['.'], build_base='build', catkin_cmake_args=None, catkin_skip_building_tests=False, cmake_args=None, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, cmake_target=None, cmake_target_skip_unavailable=False, continue_on_error=False, event_handlers=None, executor='parallel', ignore_user_meta=False, install_base='install', log_base=None, log_level=None, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f2bb92961c0>>, merge_install=False, metas=['./colcon.meta'], mixin=None, mixin_files=None, mixin_verb=('build',), packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_end=None, packages_ignore=None, packages_ignore_regex=None, packages_select=None, packages_select_build_failed=False, packages_select_by_dep=None, packages_select_regex=None, packages_select_test_failures=False, packages_skip=None, packages_skip_build_finished=False, packages_skip_by_dep=None, packages_skip_regex=None, packages_skip_test_passed=False, packages_skip_up_to=None, packages_start=None, packages_up_to=None, packages_up_to_regex=None, parallel_workers=16, paths=None, symlink_install=True, test_result_base=None, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f2bb92961c0>, verb_name='build', verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x7f2bb9296820>)
+[0.126s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.127s] INFO:colcon.colcon_metadata.package_discovery.colcon_meta:Using configuration from '/root/.colcon/metadata/default/Gazebo.meta'
+[0.127s] INFO:colcon.colcon_metadata.package_discovery.colcon_meta:Using configuration from '/root/.colcon/metadata/default/fastrtps.meta'
+[0.127s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.127s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.127s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.127s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.127s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.127s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo'
+[0.127s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.127s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.127s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.128s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.128s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.128s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.128s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.128s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.128s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.136s] DEBUG:colcon.colcon_core.package_identification:Package '.' with type 'ros.ament_python' and name 'drone_control_demo'
+[0.136s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.136s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.136s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.136s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.136s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.155s] Level 5:colcon.colcon_core.verb:set package 'drone_control_demo' build argument 'cmake_args' from command line to 'None'
+[0.155s] Level 5:colcon.colcon_core.verb:set package 'drone_control_demo' build argument 'cmake_target' from command line to 'None'
+[0.155s] Level 5:colcon.colcon_core.verb:set package 'drone_control_demo' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.155s] Level 5:colcon.colcon_core.verb:set package 'drone_control_demo' build argument 'cmake_clean_cache' from command line to 'False'
+[0.155s] Level 5:colcon.colcon_core.verb:set package 'drone_control_demo' build argument 'cmake_clean_first' from command line to 'False'
+[0.155s] Level 5:colcon.colcon_core.verb:set package 'drone_control_demo' build argument 'cmake_force_configure' from command line to 'False'
+[0.155s] Level 5:colcon.colcon_core.verb:set package 'drone_control_demo' build argument 'ament_cmake_args' from command line to 'None'
+[0.155s] Level 5:colcon.colcon_core.verb:set package 'drone_control_demo' build argument 'catkin_cmake_args' from command line to 'None'
+[0.155s] Level 5:colcon.colcon_core.verb:set package 'drone_control_demo' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.155s] DEBUG:colcon.colcon_core.verb:Building package 'drone_control_demo' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo', 'merge_install': False, 'path': '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo', 'symlink_install': True, 'test_result_base': None}
+[0.155s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.157s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.157s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo' with build type 'ament_python'
+[0.157s] Level 1:colcon.colcon_core.shell:create_environment_hook('drone_control_demo', 'ament_prefix_path')
+[0.161s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.162s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo/hook/ament_prefix_path.ps1'
+[0.162s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo/hook/ament_prefix_path.dsv'
+[0.163s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo/hook/ament_prefix_path.sh'
+[0.164s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.164s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.287s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo'
+[0.288s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.288s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.550s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo': PYTHONPATH=/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/prefix_override:/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/build --no-deps install_data
+[0.801s] Level 1:colcon.colcon_core.shell:create_environment_hook('drone_control_demo', 'pythonpath_develop')
+[0.802s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/share/drone_control_demo/hook/pythonpath_develop.ps1'
+[0.803s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo' returned '0': PYTHONPATH=/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/prefix_override:/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/build --no-deps install_data
+[0.803s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/share/drone_control_demo/hook/pythonpath_develop.dsv'
+[0.803s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/build/drone_control_demo/share/drone_control_demo/hook/pythonpath_develop.sh'
+[0.809s] Level 1:colcon.colcon_core.environment:checking '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo' for CMake module files
+[0.809s] Level 1:colcon.colcon_core.environment:checking '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo' for CMake config files
+[0.809s] Level 1:colcon.colcon_core.environment:checking '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib'
+[0.810s] Level 1:colcon.colcon_core.environment:checking '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/bin'
+[0.810s] Level 1:colcon.colcon_core.environment:checking '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/pkgconfig/drone_control_demo.pc'
+[0.810s] Level 1:colcon.colcon_core.environment:checking '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/lib/python3.8/site-packages'
+[0.810s] Level 1:colcon.colcon_core.shell:create_environment_hook('drone_control_demo', 'pythonpath')
+[0.811s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo/hook/pythonpath.ps1'
+[0.811s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo/hook/pythonpath.dsv'
+[0.811s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo/hook/pythonpath.sh'
+[0.811s] Level 1:colcon.colcon_core.environment:checking '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/bin'
+[0.811s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(drone_control_demo)
+[0.812s] INFO:colcon.colcon_core.shell:Creating package script '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo/package.ps1'
+[0.813s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo/package.dsv'
+[0.813s] INFO:colcon.colcon_core.shell:Creating package script '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo/package.sh'
+[0.814s] INFO:colcon.colcon_core.shell:Creating package script '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo/package.bash'
+[0.814s] INFO:colcon.colcon_core.shell:Creating package script '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/drone_control_demo/package.zsh'
+[0.815s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/drone_control_demo/share/colcon-core/packages/drone_control_demo)
+[0.815s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[0.815s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[0.815s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[0.815s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[0.822s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[0.822s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[0.822s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[0.822s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[0.825s] DEBUG:colcon.colcon_notification.desktop_notification.notify2:Failed to initialize notify2: org.freedesktop.DBus.Error.Spawn.ExecFailed: /usr/bin/dbus-launch terminated abnormally with the following error: Authorization required, but no authorization protocol specified
+Autolaunch error: X11 initialization failed.
+
+[0.826s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[0.827s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/local_setup.ps1'
+[0.828s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/_local_setup_util_ps1.py'
+[0.829s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/setup.ps1'
+[0.831s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/local_setup.sh'
+[0.831s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/_local_setup_util_sh.py'
+[0.832s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/setup.sh'
+[0.833s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/local_setup.bash'
+[0.833s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/setup.bash'
+[0.834s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/local_setup.zsh'
+[0.834s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/tello_ws/src/ARL_PROJ_GRUPA_IV/drone_control_demo/install/setup.zsh'
