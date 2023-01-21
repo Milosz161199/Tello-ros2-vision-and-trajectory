@@ -33,7 +33,7 @@ class PathDetector:
 
         self.__HOW_OFTEN = 2 # 2 
 
-        self.__start_point = Point3D(self.__IMAGE_MIN_X / 2.0, self.__IMAGE_MAX_Y / 2.0, [0, 0, 0])
+        self.__start_point = Point3D(self.__IMAGE_MIN_X + 20.0, self.__IMAGE_MAX_Y + 20.0, [0, 0, 0])
         
         self.__path = []
         self.__sorted_path = [self.__start_point.getPoint3DArray()]

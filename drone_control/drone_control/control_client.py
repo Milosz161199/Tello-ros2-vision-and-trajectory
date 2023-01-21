@@ -13,6 +13,11 @@ import time
 
 from action_detect.action import Detect
 
+import multiprocessing
+from multiprocessing import Process, Queue
+from matplotlib import pyplot as plt
+from matplotlib.animation import FuncAnimation
+
 
 class ControlActionClient(Node):
 
@@ -22,7 +27,7 @@ class ControlActionClient(Node):
         # topic - preferred
         self.control_with_srv = False
         # Operate in simulation or in laboratory
-        self.operate_in_sim = False
+        self.operate_in_sim = True
         
         if self.operate_in_sim:
             self.rc_srv_name = "/drone1/tello_action"
@@ -156,6 +161,40 @@ class ControlActionClient(Node):
         self.control_timer_period = 1 / 250  # 250Hz
         self._control_timer = self.create_timer(self.control_timer_period, self.control_timer_callback)
         
+        # Form plotting data
+        self.q = Queue()
+        self.plot_flag = True
+    
+    def show_trajectory(self, q):    
+        tup = self.q.get()
+        x_dest, y_dest = list(tup[3]), list(tup[4]) 
+        x = []
+        y = []
+        fig, ax = plt.subplots()
+        line, = ax.plot(x, y)
+        
+        print(x_dest, y_dest)
+        def init():
+            ax.set_xlim(-2.0, 2.0)
+            ax.set_ylim(-2.0, 2.0)
+            return line,
+
+        def update(frame):
+            x.append(self.q.get()[0])
+            y.append(self.q.get()[1])
+            line.set_data(x, y)
+            fig.gca().relim()
+            fig.gca().autoscale_view()
+            plt.scatter(x_dest, y_dest)
+            
+            return line,
+        
+        animation = FuncAnimation(fig, update, init_func=init, interval=1, blit=True)
+        
+        plt.xlim([-2.0, 2.0])
+        plt.ylim([-2.0, 2.0])
+        plt.show()
+        
     def response_callback(self, message):
         pass
     
@@ -211,6 +250,13 @@ class ControlActionClient(Node):
         print(len(self.x_arr))
         print(len(self.y_arr))
         print(len(self.z_arr))
+        
+        # thread for plotting
+        if self.plot_flag:
+            self.job_for_another_core = multiprocessing.Process(target=self.show_trajectory,args=(self.q,))
+            self.job_for_another_core.start()
+            self.q.put((self.curr_x, self.curr_y, self.curr_z, self.x_arr_to_plot, self.y_arr_to_plot, False))
+        
         time.sleep(5)
         self.start_control = True
         
@@ -230,6 +276,13 @@ class ControlActionClient(Node):
             self.reached_x_final = False
             self.reached_y_final = False
             self.reached_z_final = False
+            
+            # Plot current position
+            if self.plot_flag:
+                self.q.put((self.curr_x, self.curr_y, self.curr_z, self.x_arr_to_plot, self.y_arr_to_plot, False))
+            else:
+                self.q.put((self.curr_x, self.curr_y, self.curr_z, self.x_arr_to_plot, self.y_arr_to_plot, True))
+            
             if self.curr_point < self.number_of_points - 1:
                 # print('point:', self.curr_point, '/', self.number_of_points)
                 print(f'Point: {self.curr_point}/{self.number_of_points}, goal {float(self.x_arr[self.curr_point])}', end='\r')
@@ -254,6 +307,7 @@ class ControlActionClient(Node):
                 self.reached_z_final = self.set_z_velocity(float(0.8))
                 
             if self.drone_land:
+                time.sleep(2)
                 self._client_rc.call_async(TelloAction.Request(cmd="land"))
                 self.get_logger().info("Drone land")
                 self.drone_land = False
@@ -267,6 +321,7 @@ class ControlActionClient(Node):
                 self.go_to_final_point = False
                 self.final_point_reached = True
                 self.drone_land = True
+                self.plot_flag = False
 
             if self.stop_control:
                 self.twist_cmd = Twist()  

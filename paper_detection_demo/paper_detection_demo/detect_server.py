@@ -26,7 +26,7 @@ class DetectActionServer(Node):
     def __init__(self):
         super().__init__('detect_action_server')
         
-        self.__simulation = False
+        self.__simulation = True
         self.__image_topic = str()
         
         if self.__simulation:
@@ -63,9 +63,9 @@ class DetectActionServer(Node):
     def execute_callback(self, goal_handle):
         self.get_logger().info('Executing goal...')
         
-        x_a = [1.00, 1.00]
-        y_a = [0.00, 0.00]
-        z_a = [1.00, 1.00]
+        x_a = [1.00, 1.00, 1.5, 1.5, 0.5, 1.2]
+        y_a = [0.00, 0.00, 1.0, 1.0, 0.4, 1.4]
+        z_a = [1.00, 1.00, 1.0, 1.0, 1.0, 1.0]
         pitch_a = [0.0, 0.0, 0.0]
         roll_a = [0.0, 0.0, 0.0]
         yaw_a = [0.0, 0.0, 0.0]
