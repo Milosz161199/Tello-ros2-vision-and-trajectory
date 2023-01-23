@@ -53,8 +53,7 @@ colcon build --symlink-install
 Należy przekopiować zdjęcie z folderu **src/path_models/** do katalogu **src/tello-ros2-gazebo/tello_ros/tello_gazebo/models/marker_0/materials/textures/**, 
 następnie w pliku **src/tello-ros2-gazebo/tello_ros/tello_gazebo/models/marker_0/materials/scripts/marker_0.material** podmienić nazwę *.png na nazwę skopiowanego wcześniej zdjęcia.
 
-# Uruchomienie 
-Do wyboru mamy dwa tryby:
+# Uruchomienie (dwa tryby):
 ## **Symulacja** musimy w kodzie zmienić odpowiednie flagi (contorl_client.py oraz detect_server.py)
 ```
 # contorl_client.py
@@ -62,14 +61,15 @@ self.operate_in_sim = True
 # detect_server.py
 self.__simulation = True
 ```
-Następnie w osobnych terminalach uruchamiamy następujące polecenia: 
+Następnie w osobnych terminalach uruchamiamy następujące polecenia:
+
 **W każdy nowym otwartym termianlu należy przejść do głownego katalogo i wykonać source!**
 ```
 cd tello_ros_ws/
 source install/setup.bash
 ```
 
-W zależności jeżeli uruchamiamy symulację to startujemy gazebo, jeżeli nie to pomijamy to:
+Uruchamiamy symulację świata wraz z dronem w gazebo:
 ```
 export GAZEBO_MODEL_PATH=${PWD}/install/tello_gazebo/share/tello_gazebo/models
 source /usr/share/gazebo/setup.sh
@@ -99,7 +99,7 @@ self.operate_in_sim = False
 self.__simulation = False
 ```
 Następnie w osobnych terminalach uruchamiamy następujące polecenia: 
-Dla rzeczywistego drona potrzebujemy uruchomić teleop
+Do startowania rzeczywistym drone potrzebujemy uruchomić paczkę teleop
 ```
 ros2 launch tello_driver teleop_launch.py
 ```
