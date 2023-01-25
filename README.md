@@ -1,6 +1,42 @@
 # ARL_PROJ_GRUPA_IV
 ## Temat: Odczytywanie i odtwarzanie przez dron trajektorii narysowanej na kartce.
 
+Autorzy:
+- Albert Polak
+- Krzysztof Kwapisz
+- Miłosz Plutowski
+
+Założenia projektu:
+- dron odczytuje obraz trajektorii z kamery,
+- przetwarza trajektorię (uwzględniając ruch w trzech osiach x, y, z): x, y - kartka, z - kolor ścieżki,
+- porządkuje punkty trajektorii,
+- wykonuje trajektorię i wraca do punktu bazowego, i ląduje.
+
+Projekt można uruchomić w symulacji, jak i na rzeczywistym dronie. Na potrzeby projektu zostały również przygotowane węzły repubulikujące wiadomości zawierające pozycję z OptiTrack ([UDP_to_ROS2_OptiTrack_republisher](https://github.com/Kwach00/UDP_to_ROS2_OptiTrack_republisher.git)) i g2rr. 
+
+Wszystkie założenia udało się zrealizować. Dodatkowo przygotowaliśmy możliwość podglądu w czasie rzeczywistym punktów do odwiedzenia oraz bierzącej pozycji drona. Dzięki czemu możemy przewidywać jaki ruch wykona dron. 
+
+**Wersja obrazu: osrf/ros:foxy**
+
+Potrzebne biblioteki:
+```
+numpy==1.23.4
+opencv-contrib-python==4.5.5.64
+opencv-python==4.5.5.64
+transforms3d==0.4.1
+protobuf==3.20.0
+tqdm==4.64.1
+matplotlib==3.1.2
+imutils==0.5.4
+```
+
+<p align="center"> 
+   NAJWAŻNIEJSZE ZAŁOŻENIE, KTÓRE UDAŁO SIĘ SPEŁNIĆ
+</p>
+
+![drony](https://user-images.githubusercontent.com/77626602/214558216-03d60918-4d0e-46a7-ac59-dbc05948c30f.png)
+
+
 ## Przygotowanie contenera
 Należy pobrać obraz dockera **foxy**. Następnie podczas tworzenia konteneru należy dodać opcję (dzięki temu kontener i host ma ten sam adres IP):
 ```
@@ -128,11 +164,11 @@ ros2 action send_goal /Detect action_detect/action/Detect order:\ 0
 ## Przydatne polecenia kiedy np. coś pójdzie nie tak
 Lądowanie:
 ```bash
-ros2 service call /drone1/tello_action tello_msgs/TelloAction "{cmd: 'land'}"
+ros2 service call /tello_action tello_msgs/TelloAction "{cmd: 'land'}"
 ```
 Startowania:
 ```bash
-ros2 service call /drone1/tello_action tello_msgs/TelloAction "{cmd: 'takeoff'}" 
+ros2 service call /tello_action tello_msgs/TelloAction "{cmd: 'takeoff'}" 
 ```
 Reset symulacji:
 ```bash
