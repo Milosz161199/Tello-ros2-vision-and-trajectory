@@ -39,7 +39,7 @@ imutils==0.5.4
 ## Przykład z symulacji Gazebo
 ![drony_gazebo_01](https://user-images.githubusercontent.com/77626602/214559370-6e7910be-c41e-4d11-969b-da6428fb2028.png)
 
-## Przykłąd z rzeczywistego drona
+## Przykład z rzeczywistego drona
 ![drony_real](https://user-images.githubusercontent.com/77626602/214559636-ab05cac2-67c4-48dd-8fb8-38684056e8f3.jpg)
 
 
