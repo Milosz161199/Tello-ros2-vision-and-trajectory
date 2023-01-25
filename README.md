@@ -36,6 +36,12 @@ imutils==0.5.4
 
 ![drony](https://user-images.githubusercontent.com/77626602/214558216-03d60918-4d0e-46a7-ac59-dbc05948c30f.png)
 
+## Przykład z symulacji Gazebo
+![drony_gazebo_01](https://user-images.githubusercontent.com/77626602/214559370-6e7910be-c41e-4d11-969b-da6428fb2028.png)
+
+## Przykłąd z rzeczywistego drona
+![drony_real](https://user-images.githubusercontent.com/77626602/214559636-ab05cac2-67c4-48dd-8fb8-38684056e8f3.jpg)
+
 
 ## Przygotowanie contenera
 Należy pobrać obraz dockera **foxy**. Następnie podczas tworzenia konteneru należy dodać opcję (dzięki temu kontener i host ma ten sam adres IP):
