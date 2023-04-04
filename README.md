@@ -1,5 +1,4 @@
-# ARL_PROJ_GRUPA_IV
-## Temat: Odczytywanie i odtwarzanie przez dron trajektorii narysowanej na kartce.
+# Odczytywanie i odtwarzanie przez dron trajektorii narysowanej na kartce.
 
 Autorzy:
 - Albert Polak
